@@ -22,6 +22,18 @@ namespace Dal.Context
 
     public DbSet<Order> Orders { get; set; }
 
+        public DbSet<Favorite> Favorites { get; set; }
+
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
+
+
+
+    }
     protected override void OnModelCreating(ModelBuilder builder)
     {
       base.OnModelCreating(builder);

@@ -1,4 +1,5 @@
 using Bll.Infrastructure;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // CONFIG
+
+var logger = new LoggerConfiguration()
+    .WriteTo.File("./logs.json", rollingInterval: RollingInterval.Day)
+    .MinimumLevel.Fatal()
+    .CreateLogger();
+
+builder.Logging.AddSerilog(logger);
 
 BllConfiguration.ConfigureServices(builder.Services);
 

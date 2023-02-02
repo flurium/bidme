@@ -1,13 +1,25 @@
 using Bll.Infrastructure;
+using Dal.Context;
+using Domain.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// CONFIG
+/// DB
+builder.Services.AddDbContext<BidMeDbContext>(options => options.UseNpgsql(connectionString)); // (connectionString, new MySqlServerVersion(new Version(8, 0, 31))));
+
+// AUTH
+builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedEmail = true)
+   .AddEntityFrameworkStores<BidMeDbContext>().AddDefaultTokenProviders().AddTokenProvider<EmailConfirmationTokenProvider<User>>("emailConfirmationProvider");
+
+builder.Services.Configure<EmailConfirmationProviderOptions>(options => options.TokenLifespan = TimeSpan.FromDays(1));
 
 BllConfiguration.ConfigureServices(builder.Services);
+
 
 var app = builder.Build();
 
@@ -29,5 +41,10 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "emailConfirmation",
+    pattern: "confirmation/",
+    defaults: new { controller = "EmailConfirm", action = "Confirm" });
 
 app.Run();

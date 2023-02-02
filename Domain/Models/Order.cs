@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Models
+﻿namespace Domain.Models
 {
     public class Order
     {
@@ -13,6 +7,5 @@ namespace Domain.Models
 
         public int LotId { get; set; }
         public Lot Lot { get; set; }
-
     }
 }

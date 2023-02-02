@@ -1,6 +1,6 @@
-﻿using Dal.Repository.Interfaces;
+﻿using Dal.Context;
+using Dal.Repository.Interfaces;
 using Domain.Models;
-using Dal.Context;
 
 namespace Dal.Repository
 {

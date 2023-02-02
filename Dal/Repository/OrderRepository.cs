@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
 namespace Dal.Repository
 {
@@ -32,6 +27,6 @@ namespace Dal.Repository
         public async Task<Order?> GetByIdAsync(string userId, int lotId)
         {
             return await Entities.FirstOrDefaultAsync(o => o.UserId == userId && o.LotId == lotId);
-        }       
+        }
     }
 }

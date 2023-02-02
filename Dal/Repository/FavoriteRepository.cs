@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Dal.Context;
-using Domain.Models;
+﻿using Dal.Context;
 using Dal.Repository.Interfaces;
+using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dal.Repository
 {

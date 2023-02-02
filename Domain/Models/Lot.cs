@@ -9,7 +9,7 @@
         public string UserId { get; set; }
         public User User { get; set; }
 
-        public ICollection<Grade> Grades { get; set; }
+        // public ICollection<Grade> Grades { get; set; }
         public ICollection<LotImage> Images { get; set; }
     }
 }

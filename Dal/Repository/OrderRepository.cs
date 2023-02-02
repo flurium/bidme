@@ -1,10 +1,13 @@
-﻿using System.Linq.Expressions;
+﻿using Dal.Context;
+using Domain.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Dal.Repository
 {
-    public class OrderRepository
+    public class OrderRepository : BaseRepository<Order>
     {
-        public OrderRepository(DbContext context) : base(context)
+        public OrderRepository(BidMeDbContext context) : base(context)
         {
         }
 

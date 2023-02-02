@@ -11,13 +11,14 @@ namespace Dal.Context
             Database.EnsureCreated();
         }
 
-        public DbSet<Lot> Lots { get; set; }
-
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
+
+        public DbSet<Lot> Lots { get; set; }
+        public DbSet<LotImage> LotImages { get; set; }
 
         public DbSet<Order> Orders { get; set; }
-
-        public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

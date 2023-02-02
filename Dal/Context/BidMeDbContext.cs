@@ -15,12 +15,14 @@ namespace Dal.Context
         {
             Database.EnsureCreated();
         }
-
+        //DbSet
         public DbSet<Lot> Lots { get; set; }
 
         public DbSet<Category> Categories { get; set; }
         
         public DbSet<Order> Orders { get; set; }
+
+        public DbSet<Favorite> Favorites { get; set; }
 
 
 

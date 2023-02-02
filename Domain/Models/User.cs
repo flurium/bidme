@@ -14,5 +14,6 @@ namespace Domain.Models
 
         public ICollection<Lot> Lots { get; set; }
         public ICollection<Order> Orders { get; set; }
+        public ICollection<Favorite> Favorites { get; set; }
     }
 }

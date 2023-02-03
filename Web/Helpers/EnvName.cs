@@ -1,6 +1,6 @@
 ﻿namespace Web.Helpers
 {
-  public static class Env
+  public static class EnvName
   {
     /// <summary>
     /// Local MS Sql Server database.

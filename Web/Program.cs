@@ -3,34 +3,47 @@ using Dal.Context;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Serilog;
 using Web.Controllers;
+using Web.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-// Variables
 var aspEnv = Env("ASPNETCORE_ENVIRONMENT");
-
-string connectionString;
-if (aspEnv == "Development")
+if (aspEnv == EnvName.Production)
 {
-  connectionString = builder.Configuration.GetConnectionString("DbConnectionStr");
-  builder.Services.Configure<SendGridOptions>(options => builder.Configuration.GetSection("SendGridOptions").Bind(options));
+  var connectionString = Env("DB_CONNECTION_STR");
+  ConfigureDbAndSendGrid(
+    builder,
+    dbOptions => dbOptions.UseNpgsql(connectionString),
+    sgOptions =>
+    {
+      sgOptions.UserMail = Env("SG_USER_MAIL");
+      sgOptions.SendGridKey = Env("SG_API_KEY");
+    }
+  );
 }
-else
+else if (aspEnv == EnvName.LocalDevelopment)
 {
-  connectionString = Env("DB_CONNECTION_STR");
-  builder.Services.Configure<SendGridOptions>(options =>
-  {
-    options.UserMail = Env("SG_USER_MAIL");
-    options.SendGridKey = Env("SG_API_KEY");
-  });
+  var connectionString = builder.Configuration.GetConnectionString("Local");
+  ConfigureDbAndSendGrid(
+    builder,
+    dbOptions => dbOptions.UseSqlServer(connectionString),
+    sgOptions => builder.Configuration.GetSection("SendGridOptions").Bind(sgOptions)
+  );
 }
-
-// DB
-builder.Services.AddDbContext<BidMeDbContext>(options => options.UseNpgsql(connectionString));
+else if (aspEnv == EnvName.Development)
+{
+  var connectionString = builder.Configuration.GetConnectionString("Global");
+  ConfigureDbAndSendGrid(
+    builder,
+    dbOptions => dbOptions.UseNpgsql(connectionString),
+    sgOptions => builder.Configuration.GetSection("SendGridOptions").Bind(sgOptions)
+  );
+}
 
 // AUTH
 builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedEmail = true)
@@ -77,3 +90,9 @@ app.MapControllerRoute(
 app.Run();
 
 static string Env(string key) => Environment.GetEnvironmentVariable("DB_CONNECTION_STR") ?? "";
+
+static void ConfigureDbAndSendGrid(WebApplicationBuilder builder, Action<DbContextOptionsBuilder> configDbOptions, Action<SendGridOptions> configSendGridOptions)
+{
+  builder.Services.AddDbContext<BidMeDbContext>(configDbOptions);
+  builder.Services.Configure(configSendGridOptions);
+}

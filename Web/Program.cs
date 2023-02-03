@@ -16,17 +16,17 @@ var aspEnv = Env("ASPNETCORE_ENVIRONMENT");
 string connectionString;
 if (aspEnv == "Development")
 {
-    connectionString = builder.Configuration.GetConnectionString("DbConnectionString");
-    builder.Services.Configure<SendGridOptions>(options => builder.Configuration.GetSection("SendGridOptions").Bind(options));
+  connectionString = builder.Configuration.GetConnectionString("DbConnectionStr");
+  builder.Services.Configure<SendGridOptions>(options => builder.Configuration.GetSection("SendGridOptions").Bind(options));
 }
 else
 {
-    connectionString = Env("DB_CONNECTION_STR");
-    builder.Services.Configure<SendGridOptions>(options =>
-    {
-        options.UserMail = Env("SG_USER_MAIL");
-        options.SendGridKey = Env("SG_API_KEY");
-    });
+  connectionString = Env("DB_CONNECTION_STR");
+  builder.Services.Configure<SendGridOptions>(options =>
+  {
+    options.UserMail = Env("SG_USER_MAIL");
+    options.SendGridKey = Env("SG_API_KEY");
+  });
 }
 
 // DB
@@ -54,8 +54,8 @@ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+  app.UseExceptionHandler("/Home/Error");
+  app.UseHsts();
 }
 
 app.UseHttpsRedirection();

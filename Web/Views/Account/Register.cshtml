@@ -6,42 +6,33 @@
     ViewData["Title"] = "Register";
 }
 
-<h1 class="mb-5 mt-4 text-center">Register</h1>
+<div class="text-center my-5">
+  <h1>Register</h1>
+  <p>Welcome to BidMe. Thanks for trust us!</p>
+</div>
 
-<div class="row justify-content-center align-items-center h-100">
-    <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
-        <form asp-action="@nameof(AccountController.Register)">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="row justify-content-center">
+  <form asp-action="@nameof(AccountController.Register)" class="col col-lg-8 col-xl-6 d-flex flex-column gap-4">
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+      <input asp-for="Name" class="form-control" placeholder="Name" />
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+      <input asp-for="Email" class="form-control" placeholder="Email" />
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input type="password" asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <input type="password" asp-for="Password" class="form-control" placeholder="Password" />
             </div>
             <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input type="password" asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsSeller" /> @Html.Label("Register as a seller")
-                </label>
+                <label asp-for="ConfirmPassword" class="control-label">Confirm Password</label>
+                <input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
             </div>
             <div class="form-group text-center">
                 <input type="submit" value="Register" class="btn btn-primary" />
             </div>
         </form>
-    </div>
 </div>
 
 @section Scripts {

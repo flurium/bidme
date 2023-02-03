@@ -16,3 +16,7 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.navbar {
+  --bs-navbar-padding-y: 1rem;
+}

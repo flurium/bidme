@@ -1,13 +1,4 @@
-<<<<<<< Updated upstream
-﻿namespace Dal.UnitOfWork
-{
-    public class UnitOfWork : IUnitOfWork
-    {
-        public UnitOfWork()
-        {
-        }
-=======
-﻿using Dal.Repository;
+using Dal.Repository;
 using Dal.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -17,14 +8,30 @@ using System.Threading.Tasks;
 
 namespace Dal.UnitOfWork
 {
-  public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        public UnitOfWork(IOrderRepository orderRepository)
+        public UnitOfWork(IOrderRepository orderRepository, ILotImageRepository lotImageRepository,
+            ICategoryRepository categoryRepository, IFavoriteRepository favoriteRepository,
+            ILotRepository lotRepository, IUserRepository userRepository)
         {
             OrderRepository = orderRepository;
+            LotImageRepository = lotImageRepository;
+            CategoryRepository = categoryRepository;
+            FavoriteRepository = favoriteRepository;
+            LotRepository = lotRepository;
+            UserRepository = userRepository;
         }
 
         public IOrderRepository OrderRepository { get; }
->>>>>>> Stashed changes
+
+        public ICategoryRepository CategoryRepository { get; }
+
+        public IFavoriteRepository FavoriteRepository { get; }
+
+        public ILotImageRepository LotImageRepository { get; }
+
+        public ILotRepository LotRepository { get; }
+
+        public IUserRepository UserRepository { get; }
     }
 }

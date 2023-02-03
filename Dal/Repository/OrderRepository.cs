@@ -1,24 +1,15 @@
 ﻿using Dal.Context;
-<<<<<<< Updated upstream
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
-=======
 using Dal.Repository.Interfaces;
-using Domain.Models;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
->>>>>>> Stashed changes
 using System.Linq.Expressions;
 
 namespace Dal.Repository
 {
-<<<<<<< Updated upstream
-    public class OrderRepository : BaseRepository<Order>
-=======
     public class OrderRepository : BaseRepository<Order>, IOrderRepository
->>>>>>> Stashed changes
     {
         public OrderRepository(BidMeDbContext context) : base(context)
         {

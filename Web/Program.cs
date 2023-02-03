@@ -3,19 +3,41 @@ using Dal.Context;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Web.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-/// DB
-builder.Services.AddDbContext<BidMeDbContext>(options => options.UseNpgsql(connectionString)); // (connectionString, new MySqlServerVersion(new Version(8, 0, 31))));
+// Variables
+var aspEnv = Env("ASPNETCORE_ENVIRONMENT");
+
+string connectionString;
+if (aspEnv == "Development")
+{
+    connectionString = builder.Configuration.GetConnectionString("DbConnectionString");
+    builder.Services.Configure<SendGridOptions>(options => builder.Configuration.GetSection("SendGridOptions").Bind(options));
+}
+else
+{
+    connectionString = Env("DB_CONNECTION_STR");
+    builder.Services.Configure<SendGridOptions>(options =>
+    {
+        options.UserMail = Env("SG_USER_MAIL");
+        options.SendGridKey = Env("SG_API_KEY");
+    });
+}
+
+// DB
+builder.Services.AddDbContext<BidMeDbContext>(options => options.UseNpgsql(connectionString));
 
 // AUTH
 builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedEmail = true)
-   .AddEntityFrameworkStores<BidMeDbContext>().AddDefaultTokenProviders().AddTokenProvider<EmailConfirmationTokenProvider<User>>("emailConfirmationProvider");
+   .AddEntityFrameworkStores<BidMeDbContext>().AddDefaultTokenProviders()
+   .AddTokenProvider<EmailConfirmationTokenProvider<User>>("emailConfirmationProvider");
 
+// Logs
 var logger = new LoggerConfiguration()
     .WriteTo.File("./logs.json", rollingInterval: RollingInterval.Day)
     .MinimumLevel.Fatal()
@@ -25,16 +47,14 @@ builder.Logging.AddSerilog(logger);
 
 builder.Services.Configure<EmailConfirmationProviderOptions>(options => options.TokenLifespan = TimeSpan.FromDays(1));
 
+// Buisness servises
 BllConfiguration.ConfigureServices(builder.Services);
-
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -47,11 +67,13 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: $"{{controller={HomeController.Name}}}/{{action={nameof(HomeController.Index)}}}/{{id?}}");
 
 app.MapControllerRoute(
     name: "emailConfirmation",
     pattern: "confirmation/",
-    defaults: new { controller = "EmailConfirm", action = "Confirm" });
+    defaults: new { controller = EmailConfirmController.Name, action = nameof(EmailConfirmController.Confirm) });
 
 app.Run();
+
+static string Env(string key) => Environment.GetEnvironmentVariable("DB_CONNECTION_STR") ?? "";

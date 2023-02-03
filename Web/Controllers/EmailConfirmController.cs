@@ -7,6 +7,7 @@ namespace Web.Controllers
 {
     public class EmailConfirmController : Controller
     {
+        public static string Name => "EmailConfirm";
         private readonly UserManager<User> _userManager;
 
         public EmailConfirmController(UserManager<User> userManager)

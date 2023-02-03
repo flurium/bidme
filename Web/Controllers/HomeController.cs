@@ -6,6 +6,7 @@ namespace Web.Controllers
 {
     public class HomeController : Controller
     {
+        public static string Name => "home";
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)

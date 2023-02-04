@@ -33,6 +33,15 @@ namespace Dal.Context
       builder.Entity<Order>().HasOne(o => o.Lot).WithMany(l => l.Orders).HasForeignKey(o => o.LotId).OnDelete(DeleteBehavior.NoAction);
 
       builder.Entity<Rating>().HasKey(r => r.Id);
+      builder.Entity<Rating>().HasOne(r => r.User).WithMany(u => u.Ratings).HasForeignKey(r => r.UserId);
+
+      builder.Entity<Lot>().HasKey(l => l.Id);
+      builder.Entity<Lot>().HasOne(l => l.Category).WithMany(c => c.Lots).HasForeignKey(l => l.CategoryId);
+
+      builder.Entity<LotImage>().HasKey(li => li.Id);
+      builder.Entity<LotImage>().HasOne(li => li.Lot).WithMany(l => l.Images).HasForeignKey(l => l.LotId);
+
+      builder.Entity<Category>().HasKey(c => c.Id);
     }
   }
 }

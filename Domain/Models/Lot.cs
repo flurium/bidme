@@ -10,7 +10,7 @@
     public string UserId { get; set; }
     public User User { get; set; }
 
-    public string CategoryId { get; set; }
+    public int CategoryId { get; set; }
     public Category Category { get; set; }
 
     public ICollection<LotImage> Images { get; set; }

@@ -47,13 +47,43 @@ namespace Web.Controllers
     [HttpGet]
     public IActionResult Register()
     {
-      return View();
+            ViewBag.Error= new RegisterViewModel();
+            return View();
     }
 
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
-      var user = new User()
+            var error = new RegisterViewModel();
+            bool isError = false;
+            if (registerViewModel.Name.Length > 21)
+            {
+                error.Name = "The name is too long. Max Length=20";
+                isError = true;
+            }
+            if (!registerViewModel.Email.Contains("@") || registerViewModel.Email.Length < 5)
+            {
+                error.Email = "Email must be more than 5 characters long and must contain '@'";
+                isError = true;
+            }
+            if ((!registerViewModel.Password.Any(Char.IsUpper)) || (!registerViewModel.Password.Any(Char.IsLower)) || (!registerViewModel.Password.Any(Char.IsNumber)) || (registerViewModel.Password.Length < 6))
+            {
+                error.Password = "Password must be at least 6 characters, at least one A-Z, a-z and a special character";
+                isError = true;
+            }
+            if (registerViewModel.Password != registerViewModel.ConfirmPassword)
+            {
+                error.ConfirmPassword = "Your passwords are different";
+                isError = true;
+            }
+
+            if (isError)
+            {
+                ViewBag.Error = error;
+                return View();
+            }
+
+            var user = new User()
       {
         Email = registerViewModel.Email,
         UserName = registerViewModel.Name,

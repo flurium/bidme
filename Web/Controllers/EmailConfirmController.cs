@@ -1,7 +1,6 @@
 ﻿using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Dal.Models;
 
 namespace Web.Controllers
 {

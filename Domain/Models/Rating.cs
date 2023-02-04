@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class Rating
-    {
-        public double Value { get; set; }
+  public class Rating
+  {
+    public int Id { get; set; }
+    public double Value { get; set; }
 
-        public int UserId { get; set; }
-        public User User { get; set; }
+    public int UserId { get; set; }
+    public User User { get; set; }
 
-        public bool AsSeller { get; set; }
-
-    }
+    public bool AsSeller { get; set; }
+  }
 }

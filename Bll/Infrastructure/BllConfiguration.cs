@@ -8,22 +8,23 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bll.Infrastructure
 {
-    public static class BllConfiguration
+  public static class BllConfiguration
+  {
+    public static void ConfigureServices(IServiceCollection services)
     {
-        public static void ConfigureServices(IServiceCollection services)
-        {
-            // Repositories
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<IFavoriteRepository, FavoriteRepository>();
-            services.AddScoped<ILotImageRepository, LotImageRepository>();
-            services.AddScoped<ILotRepository, LotRepository>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
+      // Repositories
+      services.AddScoped<ICategoryRepository, CategoryRepository>();
+      services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+      services.AddScoped<ILotImageRepository, LotImageRepository>();
+      services.AddScoped<ILotRepository, LotRepository>();
+      services.AddScoped<IOrderRepository, OrderRepository>();
+      services.AddScoped<IUserRepository, UserRepository>();
 
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<IEmailSender, EmailSenderService>();
+      services.AddTransient<IUnitOfWork, UnitOfWork>();
+      services.AddTransient<IEmailSender, EmailSenderService>();
 
-            // Services
-        }
+      // Services
+      services.AddScoped<LotService>();
     }
+  }
 }

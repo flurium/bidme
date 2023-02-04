@@ -89,7 +89,7 @@ app.MapControllerRoute(
 
 app.Run();
 
-static string Env(string key) => Environment.GetEnvironmentVariable("DB_CONNECTION_STR") ?? "";
+static string Env(string key) => Environment.GetEnvironmentVariable(key) ?? "";
 
 static void ConfigureDbAndSendGrid(WebApplicationBuilder builder, Action<DbContextOptionsBuilder> configDbOptions, Action<SendGridOptions> configSendGridOptions)
 {

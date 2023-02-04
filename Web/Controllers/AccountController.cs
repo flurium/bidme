@@ -16,13 +16,13 @@ namespace Web.Controllers
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        //public AccountController(SignInManager<User> signInManager, UserManager<User> userManager, IEmailSender emailSender, RoleManager<IdentityRole> roleManager)
-        //{
-        //  _signInManager = signInManager;
-        //  _userManager = userManager;
-        //  _emailSender = emailSender;
-        //  _roleManager = roleManager;
-        //}
+        public AccountController(SignInManager<User> signInManager, UserManager<User> userManager, IEmailSender emailSender, RoleManager<IdentityRole> roleManager)
+        {
+          _signInManager = signInManager;
+         _userManager = userManager;
+         _emailSender = emailSender;
+          _roleManager = roleManager;
+        }
 
         [HttpGet]
         public IActionResult Login()
@@ -54,9 +54,9 @@ namespace Web.Controllers
         {
             var error = new RegisterViewModel();
             bool isError = false;
-            if (registerViewModel.Name.Length > 21)
+            if ((registerViewModel.Name.Length > 21) || (registerViewModel.Name.Any(Char.IsWhiteSpace))) ;
             {
-                error.Name = "The name is too long. Max Length=20";
+                error.Name = "The Name is too long (Max Length=20) and there must be no spaces in the Name";
                 isError = true;
             }
             if (!registerViewModel.Email.Contains("@") || registerViewModel.Email.Length < 5)
@@ -64,7 +64,7 @@ namespace Web.Controllers
                 error.Email = "Email must be more than 5 characters long and must contain '@'";
                 isError = true;
             }
-            if ((!registerViewModel.Password.Any(Char.IsUpper)) || (!registerViewModel.Password.Any(Char.IsLower)) || (!registerViewModel.Password.Any(Char.IsNumber)) || (registerViewModel.Password.Length < 6))
+            if ((!registerViewModel.Password.Any(Char.IsUpper)) || (!registerViewModel.Password.Any(Char.IsLower)) || (!registerViewModel.Password.Any(Char.IsNumber)) || (registerViewModel.Password.Length < 6) || (!registerViewModel.Password.Any(Char.IsPunctuation)))
             {
                 error.Password = "Password must be at least 6 characters, at least one A-Z, a-z and a special character";
                 isError = true;

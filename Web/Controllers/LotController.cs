@@ -23,7 +23,8 @@ namespace Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var res = _lotService.FirstOfDefult(x => x.Id == 1);
+            var res =await _lotService.FirstOfDefult(x => x.Id == 4);
+
             return View(res);
         }
 
@@ -34,19 +35,24 @@ namespace Web.Controllers
             return View();
         }
 
+
+
+
+
         [HttpPost]
         public async Task<IActionResult> Create(LotViewModel lotView)
         {
+           
             Lot lot = new()
             {
                 Name = lotView.Name,
                 Price = lotView.Price,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                Description = lotView.Description
-                // CategoryId = lotView.CategoryId
+                Description = lotView.Description,
+                CategoryId =lotView.CategoryId
             };
             var res = await _lotService.CreateAsync(lot);
-            /*
+            
             string filePath = Path.Combine(_host.WebRootPath, "Images");
             if (!Directory.Exists(filePath))
             {
@@ -70,8 +76,8 @@ namespace Web.Controllers
             }
 
             return RedirectToAction("RequiredProperty", "Product", new { CategoryId = res.CategoryId, ProductId = res.Id });
-            */
-            return RedirectToAction("Index", res);
+            
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -83,8 +89,13 @@ namespace Web.Controllers
 
         public async Task<IActionResult> MakeBid(double bid, int productId)
         {
-            _lotService.MakeBid(bid, productId, User.FindFirstValue(ClaimTypes.NameIdentifier));
-            return View("Index");
+           bool res=await _lotService.MakeBid(bid, productId, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (res == false)
+            {
+                ViewBag.Error = "The bid must be greater than the price";
+            }
+            ViewBag.Error = "";
+            return RedirectToAction("Index");
         }
     }
 }

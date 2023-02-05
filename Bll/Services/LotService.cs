@@ -61,17 +61,27 @@ namespace Bll.Services
 
         public async Task<bool> MakeBid(double bid, int lotId, string userId)
         {
-            var res =await unitOfWork.LotRepository.FindByConditionAsync(x => x.Id == lotId);
-            if (res == null) return false;
-
+           
             var order =await unitOfWork.OrderRepository.MaxPrice(lotId);
-
-            if ((order.OrderPrice < bid)||(order==null)) { 
-                unitOfWork.OrderRepository.CreateAsync(new Order { OrderPrice = bid, LotId=lotId, UserId=userId });
+           
+            
+            if((order == null)||(order.OrderPrice < bid))
+            {
+                var user = await unitOfWork.OrderRepository.FindByConditionAsync(x=>x.UserId==userId);
+                if (user != null)
+                {
+                    var userOrder=user.First();
+                    userOrder.OrderPrice = bid;
+                    await unitOfWork.OrderRepository.Edit(userOrder);
+                    return true;
+                }
+                await unitOfWork.OrderRepository.CreateAsync(new Order { OrderPrice = bid, LotId = lotId, UserId = userId });
                 return true;
+
             }
 
             return false;
+            
            
         }
     }

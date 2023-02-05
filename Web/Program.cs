@@ -27,21 +27,24 @@ if (aspEnv == EnvName.Production)
 }
 else if (aspEnv == EnvName.Development)
 {
-    var connectionString = builder.Configuration.GetConnectionString("Local");
-    ConfigureDbAndSendGrid(
-      builder,
-      dbOptions => dbOptions.UseSqlServer(connectionString),
-      sgOptions => builder.Configuration.GetSection("SendGridOptions").Bind(sgOptions)
-    );
-}
-else if (aspEnv == EnvName.Development)
-{
-    var connectionString = builder.Configuration.GetConnectionString("Global");
-    ConfigureDbAndSendGrid(
-      builder,
-      dbOptions => dbOptions.UseNpgsql(connectionString),
-      sgOptions => builder.Configuration.GetSection("SendGridOptions").Bind(sgOptions)
-    );
+    if (Env("STAGE") == "Local")
+    {
+        var connectionString = builder.Configuration.GetConnectionString("Local");
+        ConfigureDbAndSendGrid(
+          builder,
+          dbOptions => dbOptions.UseSqlServer(connectionString),
+          sgOptions => builder.Configuration.GetSection("SendGridOptions").Bind(sgOptions)
+        );
+    }
+    else
+    {
+        var connectionString = builder.Configuration.GetConnectionString("Global");
+        ConfigureDbAndSendGrid(
+          builder,
+          dbOptions => dbOptions.UseNpgsql(connectionString),
+          sgOptions => builder.Configuration.GetSection("SendGridOptions").Bind(sgOptions)
+        );
+    }
 }
 
 // AUTH

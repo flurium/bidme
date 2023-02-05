@@ -27,12 +27,10 @@ namespace Web.Controllers
             return View(res);
         }
 
-
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            
-           // ViewBag.Categories = await _categoryService.List();
+            // ViewBag.Categories = await _categoryService.List();
             return View();
         }
 
@@ -45,7 +43,7 @@ namespace Web.Controllers
                 Price = lotView.Price,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 Description = lotView.Description
-               // CategoryId = lotView.CategoryId
+                // CategoryId = lotView.CategoryId
             };
             var res = await _lotService.CreateAsync(lot);
             /*
@@ -88,8 +86,5 @@ namespace Web.Controllers
             _lotService.MakeBid(bid, productId, User.FindFirstValue(ClaimTypes.NameIdentifier));
             return View("Index");
         }
-
-       
-
     }
 }

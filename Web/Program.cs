@@ -25,7 +25,7 @@ if (aspEnv == EnvName.Production)
       }
     );
 }
-else if (aspEnv == EnvName.LocalDevelopment)
+else if (aspEnv == EnvName.Development)
 {
     var connectionString = builder.Configuration.GetConnectionString("Local");
     ConfigureDbAndSendGrid(

@@ -24,6 +24,12 @@ namespace Bll.Services
             if (filter.Categories.Count > 0)
                 conditions.Add(l => filter.Categories.Contains(l.Category.Name));
 
+            if (filter.MinPrice != null)
+                conditions.Add(l => l.Price >= filter.MinPrice);
+
+            if (filter.MaxPrice != null)
+                conditions.Add(l => l.Price <= filter.MaxPrice);
+
             return await unitOfWork.LotRepository.FindByConditions(conditions);
         }
 

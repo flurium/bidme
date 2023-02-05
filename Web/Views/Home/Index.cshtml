@@ -11,6 +11,12 @@
     <input class="form-control" placeholder="Enter name of lot you want to search" aria-label="Search" name="name" aria-describedby="btn-search">
     <button class="btn btn-primary" type="submit" id="btn-search">Search</button>
   </div>
+
+  <div class="input-group d-flex gap-3 mt-3 align-items-center">
+    <label>Price</label>
+    <input type="number" class="form-control" placeholder="Min" name="min" min="0" />
+    <input type="number" class="form-control" placeholder="Max" name="max" />
+  </div>
 </form>
 
 <!-- Categories -->
@@ -35,6 +41,7 @@
     }
   }
 </div>
+
 
 <!-- List of lots -->
 <div class="row g-4">

@@ -18,7 +18,15 @@ namespace Web.Controllers
             this.lotService = lotService;
         }
 
-        public async Task<IActionResult> Index(string? name, string categories = "")
+        /// <summary>
+        /// Main page of filter and serch for lots
+        /// </summary>
+        /// <param name="name">Search name of lot</param>
+        /// <param name="categories">Comma seperated categories names</param>
+        /// <param name="min">Minimal price</param>
+        /// <param name="max">Maximum price</param>
+        /// <returns></returns>
+        public async Task<IActionResult> Index(string? name, double? min, double? max, string categories = "")
         {
             var categoryList = categories.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
 
@@ -27,7 +35,9 @@ namespace Web.Controllers
                 Lots = await lotService.FilterLots(new LotFilter
                 {
                     Name = name,
-                    Categories = categoryList
+                    Categories = categoryList,
+                    MinPrice = min,
+                    MaxPrice = max
                 }),
 
                 Categories = await lotService.GetCategories(categoryList),

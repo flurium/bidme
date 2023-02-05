@@ -14,6 +14,32 @@ namespace Bll.Services
             this.unitOfWork = unitOfWork;
         }
 
+
+        public async Task<Lot> CreateAsync(Lot product)
+        {
+            if (product != null)
+            {
+                return await unitOfWork.LotRepository.CreateAsync(product);
+            }
+            return null;
+        }
+
+        public async Task Delete(int id)
+        {
+            await unitOfWork.LotRepository.Delete(id);
+        }
+
+        public async Task<IReadOnlyCollection<Lot>> FindByConditionAsync(Expression<Func<Lot, bool>> conditon)
+        {
+            return await unitOfWork.LotRepository.FindByConditionAsync(conditon);
+        }
+
+       
+        public async Task<Lot> FirstOfDefult(Expression<Func<Lot, bool>> conditon)
+        {
+            return await unitOfWork.LotRepository.FirstOrDefault(conditon);
+        }
+
         public async Task<IReadOnlyCollection<Lot>> FilterLots(LotFilter filter)
         {
             List<Expression<Func<Lot, bool>>> conditions = new();
@@ -37,6 +63,32 @@ namespace Bll.Services
         {
             //if (current == null) return await unitOfWork.CategoryRepository.GetAllAsync();
             return await unitOfWork.CategoryRepository.OrderDescending(c => current.Contains(c.Name));
+        }
+
+        public async Task<bool> MakeBid(double bid, int lotId, string userId)
+        {
+           
+            var order =await unitOfWork.OrderRepository.MaxPrice(lotId);
+           
+            
+            if((order == null)||(order.OrderPrice < bid))
+            {
+                var user = await unitOfWork.OrderRepository.FindByConditionAsync(x=>x.UserId==userId);
+                if (user != null)
+                {
+                    var userOrder=user.First();
+                    userOrder.OrderPrice = bid;
+                    await unitOfWork.OrderRepository.Edit(userOrder);
+                    return true;
+                }
+                await unitOfWork.OrderRepository.CreateAsync(new Order { OrderPrice = bid, LotId = lotId, UserId = userId });
+                return true;
+
+            }
+
+            return false;
+            
+           
         }
     }
 }

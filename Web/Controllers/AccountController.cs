@@ -54,7 +54,7 @@ namespace Web.Controllers
         {
             var error = new RegisterViewModel();
             bool isError = false;
-            if ((registerViewModel.Name.Length > 21) || (registerViewModel.Name.Any(Char.IsWhiteSpace))) ;
+            if ((registerViewModel.Name.Length > 21) || (registerViewModel.Name.Any(Char.IsWhiteSpace))) 
             {
                 error.Name = "The Name is too long (Max Length=20) and there must be no spaces in the Name";
                 isError = true;

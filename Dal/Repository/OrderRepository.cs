@@ -19,6 +19,11 @@ namespace Dal.Repository
             await _db.SaveChangesAsync();
         }
 
+        public async Task<Order> FirstOrDefault(Expression<Func<Order, bool>> conditon)
+        {
+            return Entities.FirstOrDefaultAsync(conditon).Result;
+        }
+
         public virtual async Task<IReadOnlyCollection<Order>> FindIncludeProductsAsync(Expression<Func<Order, bool>> conditon)
             => await Entities.Include(o => o.Lot).Where(conditon).ToListAsync().ConfigureAwait(false);
 
@@ -32,5 +37,18 @@ namespace Dal.Repository
         {
             return await Entities.FirstOrDefaultAsync(o => o.UserId == userId && o.LotId == lotId);
         }
+
+        public async Task<Order> MaxPrice(int lotid)
+        {
+            var order =await Entities.Where(x => x.LotId == lotid).OrderByDescending(n => n).ToListAsync();
+            if (order.Count==0)
+            {
+                return null;
+            }
+
+            return order.First();
+
+        }
+
     }
 }

@@ -35,5 +35,13 @@ namespace Bll.Services
         {
             return await _unitOfWork.OrderRepository.GetByIdAsync(uId, pId);
         }
+
+        public async Task<IReadOnlyCollection<Order>> FindByConditionAsync(Expression<Func<Order, bool>> conditon)
+        {
+            return await _unitOfWork.OrderRepository.FindByConditionAsync(conditon);
+        }
+
+       
+
     }
 }

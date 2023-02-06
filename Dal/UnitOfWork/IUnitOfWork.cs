@@ -9,6 +9,5 @@ namespace Dal.UnitOfWork
         public ILotImageRepository LotImageRepository { get; }
         public ILotRepository LotRepository { get; }
         public IOrderRepository OrderRepository { get; }
-        public IUserRepository UserRepository { get; }
     }
 }

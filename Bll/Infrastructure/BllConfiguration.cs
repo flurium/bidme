@@ -17,7 +17,6 @@ namespace Bll.Infrastructure
             services.AddScoped<ILotImageRepository, LotImageRepository>();
             services.AddScoped<ILotRepository, LotRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IEmailSender, EmailSenderService>();

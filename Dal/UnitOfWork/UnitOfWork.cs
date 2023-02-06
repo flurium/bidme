@@ -6,14 +6,13 @@ namespace Dal.UnitOfWork
     {
         public UnitOfWork(IOrderRepository orderRepository, ILotImageRepository lotImageRepository,
             ICategoryRepository categoryRepository, IFavoriteRepository favoriteRepository,
-            ILotRepository lotRepository, IUserRepository userRepository)
+            ILotRepository lotRepository)
         {
             OrderRepository = orderRepository;
             LotImageRepository = lotImageRepository;
             CategoryRepository = categoryRepository;
             FavoriteRepository = favoriteRepository;
             LotRepository = lotRepository;
-            UserRepository = userRepository;
         }
 
         public IOrderRepository OrderRepository { get; }
@@ -25,7 +24,5 @@ namespace Dal.UnitOfWork
         public ILotImageRepository LotImageRepository { get; }
 
         public ILotRepository LotRepository { get; }
-
-        public IUserRepository UserRepository { get; }
     }
 }

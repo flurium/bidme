@@ -23,7 +23,7 @@ namespace Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var res =await _lotService.FirstOfDefult(x => x.Id == 4);
+            var res =await _lotService.FirstOrDefault(x => x.Id == 4);
 
             return View(res);
         }
@@ -34,9 +34,6 @@ namespace Web.Controllers
             // ViewBag.Categories = await _categoryService.List();
             return View();
         }
-
-
-
 
 
         [HttpPost]
@@ -95,6 +92,17 @@ namespace Web.Controllers
                 ViewBag.Error = "The bid must be greater than the price";
             }
             ViewBag.Error = "";
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> EditDescription(string description, int lotId)
+        {
+            var lot = await _lotService.FirstOrDefault(l => l.Id == lotId);
+            if (lot.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                await _lotService.Edit(description, lotId);
+            }
+
             return RedirectToAction("Index");
         }
     }

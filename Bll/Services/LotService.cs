@@ -33,9 +33,8 @@ namespace Bll.Services
         {
             return await unitOfWork.LotRepository.FindByConditionAsync(conditon);
         }
-
-       
-        public async Task<Lot> FirstOfDefult(Expression<Func<Lot, bool>> conditon)
+      
+        public async Task<Lot> FirstOrDefault(Expression<Func<Lot, bool>> conditon)
         {
             return await unitOfWork.LotRepository.FirstOrDefault(conditon);
         }
@@ -89,6 +88,18 @@ namespace Bll.Services
             return false;
             
            
+        }
+
+        public async Task Edit(string description, int lotId)
+        {
+            var lot = await unitOfWork.LotRepository.GetByIdAsync(lotId);
+
+            if (lot != null)
+            {
+                lot.Description = description;
+            }
+            else return;
+            await unitOfWork.LotRepository.Edit(lot);
         }
     }
 }

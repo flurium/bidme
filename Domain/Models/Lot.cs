@@ -13,6 +13,7 @@
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
+        //public List<string> Tags { get; set; }
         public ICollection<LotImage> Images { get; set; }
         public IReadOnlyCollection<Favorite> Favorites { get; set; }
         public IReadOnlyCollection<Order> Orders { get; set; }

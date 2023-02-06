@@ -5,6 +5,12 @@
     /// </summary>
     public class Favorite
     {
+        public Favorite(string userId, int lotId)
+        {
+            UserId = userId;
+            LotId = lotId;
+        }
+
         public string UserId { get; set; }
         public User User { get; set; }
 

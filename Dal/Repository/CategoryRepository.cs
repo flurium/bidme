@@ -11,12 +11,7 @@ namespace Dal.Repository
         {
         }
 
-        public async Task Delete(int id)
-        {
-            var category = await Entities.FirstOrDefaultAsync(c => c.Id == id).ConfigureAwait(false);
-            if (category != null) Entities.Remove(category);
-            await _db.SaveChangesAsync();
-        }
+        public virtual async Task DeleteOne(int id) => await base.DeleteOne(c => c.Id == id);
 
         public async Task Update(int id, string name)
         {
@@ -25,6 +20,6 @@ namespace Dal.Repository
             await _db.SaveChangesAsync();
         }
 
-        public async Task<Category> GetByIdAsync(int id) => await Entities.FirstOrDefaultAsync(c => c.Id == id);
+        public async Task<Category?> GetById(int id) => await Entities.FirstOrDefaultAsync(c => c.Id == id);
     }
 }

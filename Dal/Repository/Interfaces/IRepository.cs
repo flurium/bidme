@@ -12,6 +12,16 @@ namespace Dal.Repository.Interfaces
 
         Task<IReadOnlyCollection<TEntity>> OrderDescending(Expression<Func<TEntity, bool>> conditon);
 
-        Task CreateAsync(TEntity entity);
+        // Create
+        Task Create(TEntity entity);
+
+        Task<TEntity> CreateReturn(TEntity entity);
+
+        /// <summary> Universal delete </summary>
+        Task DeleteOne(Expression<Func<TEntity, bool>> condition);
+
+        /// <summary> Universal delete and return back</summary>
+        /// <returns>Entity or null if entity wasn't found</returns>
+        Task<TEntity?> DeleteOneReturn(Expression<Func<TEntity, bool>> condition);
     }
 }

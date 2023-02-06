@@ -25,7 +25,7 @@ namespace Bll.Services
         {
             if (productImage != null)
             {
-                await _unitOfWork.LotImageRepository.CreateAsync(productImage);
+                await _unitOfWork.LotImageRepository.Create(productImage);
             }
         }
 

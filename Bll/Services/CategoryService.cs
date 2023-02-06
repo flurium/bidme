@@ -1,6 +1,4 @@
-﻿using Dal.Models;
-using Dal.Repository;
-using Dal.UnitOfWork;
+﻿using Dal.UnitOfWork;
 using Domain.Models;
 
 namespace Bll.Services
@@ -50,6 +48,7 @@ namespace Bll.Services
             }
             catch (Exception) { return false; }
         }
+
         /*
         public async Task<Category?> PropertiesFor(int id)
         {

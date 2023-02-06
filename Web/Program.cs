@@ -27,7 +27,9 @@ if (aspEnv == EnvName.Production)
 }
 else if (aspEnv == EnvName.Development)
 {
-    if (Env("STAGE") == "Local")
+    // change it to true if you want to use local db
+    const bool isLocal = false;
+    if (isLocal)
     {
         var connectionString = builder.Configuration.GetConnectionString("Local");
         ConfigureDbAndSendGrid(

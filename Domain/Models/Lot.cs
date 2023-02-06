@@ -15,6 +15,7 @@
 
         //public List<string> Tags { get; set; }
         public ICollection<LotImage> Images { get; set; }
+
         public IReadOnlyCollection<Favorite> Favorites { get; set; }
         public IReadOnlyCollection<Order> Orders { get; set; }
     }

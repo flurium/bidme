@@ -47,7 +47,7 @@ namespace Dal.Repository
             {
                 res = res.Where(conditon);
             }
-           
+
             return await res.ToListAsync().ConfigureAwait(false);
         }
 
@@ -61,7 +61,5 @@ namespace Dal.Repository
         {
             return await Entities.FirstOrDefaultAsync(p => p.Id == id);
         }
-
-   
     }
 }

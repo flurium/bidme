@@ -40,15 +40,13 @@ namespace Dal.Repository
 
         public async Task<Order> MaxPrice(int lotid)
         {
-            var order =await Entities.Where(x => x.LotId == lotid).OrderByDescending(n => n).ToListAsync();
-            if (order.Count==0)
+            var order = await Entities.Where(x => x.LotId == lotid).OrderByDescending(n => n).ToListAsync();
+            if (order.Count == 0)
             {
                 return null;
             }
 
             return order.First();
-
         }
-
     }
 }

@@ -14,7 +14,6 @@ namespace Bll.Services
             this.unitOfWork = unitOfWork;
         }
 
-
         public async Task<Lot> CreateAsync(Lot product)
         {
             if (product != null)
@@ -33,7 +32,7 @@ namespace Bll.Services
         {
             return await unitOfWork.LotRepository.FindByConditionAsync(conditon);
         }
-      
+
         public async Task<Lot> FirstOrDefault(Expression<Func<Lot, bool>> conditon)
         {
             return await unitOfWork.LotRepository.FirstOrDefault(conditon);
@@ -66,28 +65,23 @@ namespace Bll.Services
 
         public async Task<bool> MakeBid(double bid, int lotId, string userId)
         {
-           
-            var order =await unitOfWork.OrderRepository.MaxPrice(lotId);
-           
-            
-            if((order == null)||(order.OrderPrice < bid))
+            var order = await unitOfWork.OrderRepository.MaxPrice(lotId);
+
+            if ((order == null) || (order.OrderPrice < bid))
             {
-                var user = await unitOfWork.OrderRepository.FindByConditionAsync(x=>x.UserId==userId);
+                var user = await unitOfWork.OrderRepository.FindByConditionAsync(x => x.UserId == userId);
                 if (user != null)
                 {
-                    var userOrder=user.First();
+                    var userOrder = user.First();
                     userOrder.OrderPrice = bid;
                     await unitOfWork.OrderRepository.Edit(userOrder);
                     return true;
                 }
                 await unitOfWork.OrderRepository.CreateAsync(new Order { OrderPrice = bid, LotId = lotId, UserId = userId });
                 return true;
-
             }
 
             return false;
-            
-           
         }
 
         public async Task Edit(string description, int lotId)

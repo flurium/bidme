@@ -1,9 +1,7 @@
-﻿using System.Linq.Expressions;
-using Microsoft.AspNetCore.Hosting;
-using Dal.Models;
-using Dal.Repository;
+﻿using Dal.UnitOfWork;
 using Domain.Models;
-using Dal.UnitOfWork;
+using Microsoft.AspNetCore.Hosting;
+using System.Linq.Expressions;
 
 namespace Bll.Services
 {
@@ -12,7 +10,6 @@ namespace Bll.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _host;
 
-
         public LotImageService(IUnitOfWork unitOfWork, IWebHostEnvironment appEnv)
         {
             _unitOfWork = unitOfWork;
@@ -20,7 +17,7 @@ namespace Bll.Services
         }
 
         public async Task<IReadOnlyCollection<LotImage>> FindByConditionAsync(Expression<Func<LotImage, bool>> conditon)
-          =>  await _unitOfWork.LotImageRepository.FindByConditionAsync(conditon);
+          => await _unitOfWork.LotImageRepository.FindByConditionAsync(conditon);
 
         public async Task<IReadOnlyCollection<LotImage>> List() => await _unitOfWork.LotImageRepository.GetAllAsync();
 
@@ -31,6 +28,7 @@ namespace Bll.Services
                 await _unitOfWork.LotImageRepository.CreateAsync(productImage);
             }
         }
+
         /*
         public async Task Delete(int id)
         {
@@ -49,14 +47,11 @@ namespace Bll.Services
                     try
                     {
                         System.IO.File.Delete(fullPath);
-
                     }
                     catch (Exception e)
                     {
-
                     }
                 }
-
             }
         }
     }

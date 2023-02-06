@@ -23,7 +23,7 @@ namespace Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var res =await _lotService.FirstOrDefault(x => x.Id == 4);
+            var res = await _lotService.FirstOrDefault(x => x.Id == 4);
 
             return View(res);
         }
@@ -35,21 +35,19 @@ namespace Web.Controllers
             return View();
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Create(LotViewModel lotView)
         {
-           
             Lot lot = new()
             {
                 Name = lotView.Name,
                 Price = lotView.Price,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 Description = lotView.Description,
-                CategoryId =lotView.CategoryId
+                CategoryId = lotView.CategoryId
             };
             var res = await _lotService.CreateAsync(lot);
-            
+
             string filePath = Path.Combine(_host.WebRootPath, "Images");
             if (!Directory.Exists(filePath))
             {
@@ -67,13 +65,13 @@ namespace Web.Controllers
                     await uploadedFile.CopyToAsync(fileStream);
                 }
 
-               LotImage img = new() { LotId = res.Id, Path = path };
+                LotImage img = new() { LotId = res.Id, Path = path };
 
                 await _lotImageService.CreateAsync(img);
             }
 
             return RedirectToAction("RequiredProperty", "Product", new { CategoryId = res.CategoryId, ProductId = res.Id });
-            
+
             return RedirectToAction("Index");
         }
 
@@ -86,7 +84,7 @@ namespace Web.Controllers
 
         public async Task<IActionResult> MakeBid(double bid, int productId)
         {
-           bool res=await _lotService.MakeBid(bid, productId, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            bool res = await _lotService.MakeBid(bid, productId, User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (res == false)
             {
                 ViewBag.Error = "The bid must be greater than the price";

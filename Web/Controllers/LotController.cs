@@ -1,6 +1,7 @@
 ﻿using Bll.Services;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Security.Claims;
 using Web.Models;
 
@@ -38,13 +39,29 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(LotViewModel lotView)
         {
+            var time = DateTime.Now;
+            switch (lotView.CloseTime)
+            {
+                case "1":
+                    time.AddDays(1.0);
+                    break;
+                case "3":
+                    time.AddDays(3.0);
+                    break;
+                case "7":
+                    time.AddDays(7.0);
+                    break;
+                default:
+                    break;
+            }
             Lot lot = new()
             {
                 Name = lotView.Name,
                 Price = lotView.Price,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 Description = lotView.Description,
-                CategoryId = lotView.CategoryId
+                CategoryId = lotView.CategoryId,
+                CloseTime = time           
             };
             var res = await _lotService.CreateAsync(lot);
 

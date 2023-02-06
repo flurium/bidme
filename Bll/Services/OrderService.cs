@@ -17,7 +17,7 @@ namespace Bll.Services
         {
             if (order != null)
             {
-                await _unitOfWork.OrderRepository.CreateAsync(order);
+                await _unitOfWork.OrderRepository.Create(order);
             }
         }
 
@@ -33,7 +33,7 @@ namespace Bll.Services
 
         public async Task<Order?> Get(string uId, int pId)
         {
-            return await _unitOfWork.OrderRepository.GetByIdAsync(uId, pId);
+            return await _unitOfWork.OrderRepository.GetById(uId, pId);
         }
 
         public async Task<IReadOnlyCollection<Order>> FindByConditionAsync(Expression<Func<Order, bool>> conditon)

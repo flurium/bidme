@@ -18,14 +18,14 @@ namespace Bll.Services
         {
             if (product != null)
             {
-                return await unitOfWork.LotRepository.CreateAsync(product);
+                return await unitOfWork.LotRepository.CreateReturn(product);
             }
             return null;
         }
 
         public async Task Delete(int id)
         {
-            await unitOfWork.LotRepository.Delete(id);
+            await unitOfWork.LotRepository.DeleteOne(id);
         }
 
         public async Task<IReadOnlyCollection<Lot>> FindByConditionAsync(Expression<Func<Lot, bool>> conditon)
@@ -59,7 +59,6 @@ namespace Bll.Services
 
         public async Task<IReadOnlyCollection<Category>> GetCategories(List<string> current)
         {
-            //if (current == null) return await unitOfWork.CategoryRepository.GetAllAsync();
             return await unitOfWork.CategoryRepository.OrderDescending(c => current.Contains(c.Name));
         }
 
@@ -77,7 +76,7 @@ namespace Bll.Services
                     await unitOfWork.OrderRepository.Edit(userOrder);
                     return true;
                 }
-                await unitOfWork.OrderRepository.CreateAsync(new Order { OrderPrice = bid, LotId = lotId, UserId = userId });
+                await unitOfWork.OrderRepository.Create(new Order { OrderPrice = bid, LotId = lotId, UserId = userId });
                 return true;
             }
 
@@ -86,7 +85,7 @@ namespace Bll.Services
 
         public async Task Edit(string description, int lotId)
         {
-            var lot = await unitOfWork.LotRepository.GetByIdAsync(lotId);
+            var lot = await unitOfWork.LotRepository.GetById(lotId);
 
             if (lot != null)
             {

@@ -11,8 +11,8 @@ namespace Dal.Repository.Interfaces
 
         Task Edit(Order order);
 
-        Task<Order?> GetByIdAsync(string userId, int productId);
+        Task<Order?> GetById(string userId, int productId);
 
-        Task<Order> MaxPrice(int lotid);
+        Task<Order?> MaxPrice(int lotid);
     }
 }

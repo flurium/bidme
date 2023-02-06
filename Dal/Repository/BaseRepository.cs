@@ -19,12 +19,37 @@ namespace Dal.Repository
 
         protected DbSet<TEntity> Entities => _entities;
 
-        public virtual async Task CreateAsync(TEntity entity)
+        // Create
+        public virtual async Task Create(TEntity entity)
         {
             await Entities.AddAsync(entity).ConfigureAwait(false);
             await _db.SaveChangesAsync();
         }
 
+        public virtual async Task<TEntity> CreateReturn(TEntity entity)
+        {
+            var res = await Entities.AddAsync(entity).ConfigureAwait(false);
+            await _db.SaveChangesAsync();
+            return res.Entity;
+        }
+
+        // Universal delete
+        public virtual async Task DeleteOne(Expression<Func<TEntity, bool>> condition)
+        {
+            var entity = await Entities.FirstOrDefaultAsync(condition);
+            if (entity != null) Entities.Remove(entity);
+            await _db.SaveChangesAsync();
+        }
+
+        public virtual async Task<TEntity?> DeleteOneReturn(Expression<Func<TEntity, bool>> condition)
+        {
+            var entity = await Entities.FirstOrDefaultAsync(condition);
+            if (entity != null) Entities.Remove(entity);
+            await _db.SaveChangesAsync();
+            return entity;
+        }
+
+        // Get
         public virtual async Task<IReadOnlyCollection<TEntity>> FindByConditionAsync(Expression<Func<TEntity, bool>> conditon)
             => await Entities.Where(conditon).ToListAsync().ConfigureAwait(false);
 
@@ -41,9 +66,9 @@ namespace Dal.Repository
         public virtual async Task<IReadOnlyCollection<TEntity>> GetAllAsync()
                 => await Entities.ToListAsync().ConfigureAwait(false);
 
-        public async Task<IReadOnlyCollection<TEntity>> OrderDescending(Expression<Func<TEntity, bool>> conditon)
+        public async Task<IReadOnlyCollection<TEntity>> OrderDescending(Expression<Func<TEntity, bool>> condition)
         {
-            return await Entities.OrderByDescending(conditon).ToListAsync().ConfigureAwait(false);
+            return await Entities.OrderByDescending(condition).ToListAsync().ConfigureAwait(false);
         }
     }
 }

@@ -32,16 +32,8 @@ namespace Web.Controllers
 
             var catalogViewModel = new CatalogViewModel
             {
-                Lots = await lotService.FilterLots(new LotFilter
-                {
-                    Name = name,
-                    Categories = categoryList,
-                    MinPrice = min,
-                    MaxPrice = max
-                }),
-
+                Lots = await lotService.FilterLots(new LotFilter(name, categoryList, min, max)),
                 Categories = await lotService.GetCategories(categoryList),
-
                 SelectedCategories = categoryList
             };
 

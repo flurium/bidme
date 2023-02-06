@@ -19,7 +19,7 @@ namespace Bll.Services
             try
             {
                 category.Name = category.Name.Trim();
-                await _unitOfWork.CategoryRepository.CreateAsync(category);
+                await _unitOfWork.CategoryRepository.Create(category);
                 return true;
             }
             catch (Exception) { return false; }
@@ -43,7 +43,7 @@ namespace Bll.Services
         {
             try
             {
-                await _unitOfWork.CategoryRepository.Delete(id);
+                await _unitOfWork.CategoryRepository.DeleteOne(id);
                 return true;
             }
             catch (Exception) { return false; }

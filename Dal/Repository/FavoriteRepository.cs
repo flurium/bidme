@@ -11,12 +11,7 @@ namespace Dal.Repository
         {
         }
 
-        public async Task Delete(string UserId, int ProductId)
-        {
-            var favorite = await Entities.FirstOrDefaultAsync(o => o.UserId == UserId && o.LotId == ProductId).ConfigureAwait(false);
-            if (favorite != null) Entities.Remove(favorite);
-            _db.SaveChanges();
-        }
+        public async Task DeleteOne(string userId, int lotId) => await base.DeleteOne(f => f.UserId == userId && f.LotId == lotId);
 
         public async Task<bool> IsFavoriteExistsAsync(Favorite favorite) => await Entities.AnyAsync(f => f.UserId == favorite.UserId && f.LotId == favorite.LotId).ConfigureAwait(false);
     }

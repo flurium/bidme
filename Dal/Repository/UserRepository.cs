@@ -1,6 +1,7 @@
 ﻿using Dal.Context;
 using Dal.Repository.Interfaces;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dal.Repository
 {
@@ -10,6 +11,6 @@ namespace Dal.Repository
         {
         }
 
-        public async Task<User?> GetUserById(string Id) => Entities.FirstOrDefault(u => u.Id == Id);
+        public async Task<User?> GetById(string Id) => await Entities.FirstOrDefaultAsync(u => u.Id == Id);
     }
 }

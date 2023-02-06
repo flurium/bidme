@@ -4,6 +4,6 @@ namespace Dal.Repository.Interfaces
 {
     public interface IUserRepository : IRepository<User>
     {
-        Task<User> GetUserById(string Id);
+        Task<User?> GetById(string Id);
     }
 }

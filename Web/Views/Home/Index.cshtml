@@ -45,20 +45,21 @@
 
 <!-- List of lots -->
 <div class="row g-4">
-  @foreach (var product in Model.Lots)
+  @foreach (var lot in Model.Lots)
   {
     <div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
       <div class="card">
         <div class="card-body">
-          @*@if (product.Images.Count != 0)
+          @if (lot.Images.Count != 0)
           {
-            <img src="@product.Images.ElementAt(0).Url" class="card-img-top mb-3" width="250" height="280" alt="@product.Name" />
-          }*@
+            <img src="@lot.Images.ElementAt(0).Path" class="card-img-top mb-3" width="250" height="280" alt="@lot.Name image" />
+          }
           <div class="mb-3">
-            <h5 class="mb-3">@product.Name</h5>
-            <p class="fs-5 fw-bold my-1">@product.Price $</p>
+            <h5 class="mb-3">@lot.Name</h5>
+            <p class="fs-5 fw-bold my-1">@lot.Price $</p>
           </div>
           <div class="d-flex gap-3 align-items-center pb-2 mb-1">
+            <a class="btn btn-primary">Add to favorites</a>
             @*@if (User.Identity != null && User.Identity.Name != null)
             {
               <form asp-controller="Catalog" asp-action="@nameof(CatalogController.ToFavorites)" method="post">

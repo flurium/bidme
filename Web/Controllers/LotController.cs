@@ -70,9 +70,7 @@ namespace Web.Controllers
                 await _lotImageService.CreateAsync(img);
             }
 
-            return RedirectToAction("RequiredProperty", "Product", new { CategoryId = res.CategoryId, ProductId = res.Id });
-
-            return RedirectToAction("Index");
+            return RedirectToAction("RequiredProperty", "Product", new { res.CategoryId, ProductId = res.Id });
         }
 
         public async Task<IActionResult> Delete(int id)

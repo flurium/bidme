@@ -26,6 +26,11 @@ namespace Web.Controllers
         {
             var res = await _lotService.FirstOrDefault(x => x.Id == 4);
 
+            if (res.CloseTime >= DateTime.Now)
+            {
+                await _lotService.Expired(res.Id);
+            }
+
             return View(res);
         }
 

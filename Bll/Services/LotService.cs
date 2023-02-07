@@ -33,7 +33,9 @@ namespace Bll.Services
             return await unitOfWork.LotRepository.FindByConditionAsync(conditon);
         }
 
-        public async Task<Lot> FirstOrDefault(Expression<Func<Lot, bool>> conditon)
+        public async Task<Lot?> GetOne(int id) => await unitOfWork.LotRepository.GetByIdWithImages(id);
+
+        public async Task<Lot?> FirstOrDefault(Expression<Func<Lot, bool>> conditon)
         {
             return await unitOfWork.LotRepository.FirstOrDefault(conditon);
         }

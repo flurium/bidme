@@ -26,6 +26,9 @@ namespace Bll.Infrastructure
             services.AddScoped<CategoryService>();
             services.AddScoped<LotImageService>();
             services.AddScoped<OrderService>();
+
+            // Background
+            services.AddHostedService<LotCloserService>();
         }
     }
 }

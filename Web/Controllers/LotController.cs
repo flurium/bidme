@@ -8,6 +8,8 @@ namespace Web.Controllers
 {
     public class LotController : Controller
     {
+        public static string Name => "lot";
+
         private readonly LotService _lotService;
         private readonly CategoryService _categoryService;
         private readonly LotImageService _lotImageService;
@@ -21,10 +23,10 @@ namespace Web.Controllers
             _host = webHost;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Details(int id)
         {
-            var res = await _lotService.FirstOrDefault(x => x.Id == 4);
-
+            var res = await _lotService.GetOne(id);
+            if (res == null) return RedirectToAction(nameof(HomeController.Index), HomeController.Name);
             return View(res);
         }
 

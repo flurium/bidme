@@ -35,9 +35,9 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            // ViewBag.Categories = await _categoryService.List();
+            ViewBag.Categories = await _categoryService.List();
             return View();
         }
 

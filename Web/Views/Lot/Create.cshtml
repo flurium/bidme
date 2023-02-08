@@ -1,6 +1,7 @@
 ﻿
 @using Domain.Models
 @using Web.Controllers
+@using static Domain.Models.Term
 
 @model LotViewModel
 
@@ -27,17 +28,19 @@
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label">Category:</label>
                 <select required class="form-select form-select-lg mb-3" name="CategoryId">
-                    <option selected value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
                 </select>
             </div>
             <div class="form-group">
                 <label asp-for="CloseTime" class="control-label">Close Time:</label>
                 <select required class="form-select form-select-lg mb-3" name="CloseTime">
-                    <option selected value="1">1 day</option>
-                    <option value="3">3 days</option>
-                    <option value="7">7 days</option>
+                    @foreach (var value in Enum.GetValues(typeof(VALUE)))
+                    {
+                        <option value="@value">@Enum.GetName(typeof(VALUE), value) day(s)</option>
+                    }                  
                 </select>
             </div>    
             <div class="form-group">

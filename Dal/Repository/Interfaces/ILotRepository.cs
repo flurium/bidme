@@ -11,6 +11,8 @@ namespace Dal.Repository.Interfaces
 
         Task Edit(Lot product);
 
+        Task UpdateStatus(int id, bool isClosed);
+
         Task<Lot?> GetById(int id);
 
         Task<Lot?> GetByIdWithImages(int id);

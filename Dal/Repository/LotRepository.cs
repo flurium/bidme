@@ -58,5 +58,14 @@ namespace Dal.Repository
             entities = orderDescending ? entities.OrderByDescending(order) : entities.OrderBy(order);
             return await entities.ToListAsync().ConfigureAwait(false);
         }
+
+        public async Task UpdateStatus(int id, bool isClosed)
+        {
+            var entity = await GetById(id);
+            if (entity == null) return;
+
+            entity.IsClosed = isClosed;
+            await _db.SaveChangesAsync();
+        }
     }
 }

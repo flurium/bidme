@@ -1,4 +1,5 @@
-﻿using Dal.Context;
+﻿using Bll.Models;
+using Dal.Context;
 using Dal.Repository.Interfaces;
 using Domain.Models;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +21,25 @@ namespace Bll.Services
 
         public LotCloserService(IServiceProvider services) => this.services = services;
 
-        public LinkedList<Lot> Order { get; private set; }
+        public LinkedList<WaitingLot> Order { get; private set; }
+
+        public void AddToOrder(WaitingLot lot)
+        {
+            var place = FindPlaceForNew(lot.CloseTime);
+            if (place != null) Order.AddAfter(place, lot);
+            else Order.AddFirst(lot);
+        }
+
+        private LinkedListNode<WaitingLot>? FindPlaceForNew(DateTime time)
+        {
+            var last = Order.Last;
+            while (last != null)
+            {
+                if (last.Value.CloseTime <= time) return last;
+                last = last.Previous;
+            }
+            return null;
+        }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -38,7 +57,8 @@ namespace Bll.Services
         {
             // todo order by time
             var lots = await lotRepository.FindMany(l => !l.IsClosed, l => l.CloseTime, false);
-            Order = new(lots);
+            var waitingLots = lots.Select(l => new WaitingLot(l.Id, l.CloseTime));
+            Order = new(waitingLots);
         }
 
         private async Task Look(ILotRepository lotRepository, CancellationToken stoppingToken)
@@ -48,9 +68,8 @@ namespace Bll.Services
                 var current = Order.First;
                 while (current != null && current.Value.CloseTime <= DateTime.Now)
                 {
-                    current.Value.IsClosed = true;
-                    await lotRepository.Edit(current.Value);
-                    Order.RemoveFirst();
+                    await lotRepository.UpdateStatus(current.Value.Id, true);
+                    Order.Remove(current);
                     current = current.Next;
                 }
                 await Task.Delay(60000, stoppingToken);

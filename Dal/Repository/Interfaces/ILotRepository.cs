@@ -11,12 +11,6 @@ namespace Dal.Repository.Interfaces
 
         Task Edit(Lot product);
 
-        Task UpdateStatus(int id, bool isClosed);
-
         Task<Lot?> GetById(int id);
-
-        Task<Lot?> GetByIdWithImages(int id);
-
-        Task<IReadOnlyCollection<Lot>> FindMany<TKey>(Expression<Func<Lot, bool>> find, Expression<Func<Lot, TKey>> order, bool orderDescending);
     }
 }

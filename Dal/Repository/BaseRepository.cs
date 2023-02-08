@@ -26,10 +26,9 @@ namespace Dal.Repository
             await _db.SaveChangesAsync();
         }
 
-        public virtual async Task<TEntity?> CreateReturn(TEntity entity)
+        public virtual async Task<TEntity> CreateReturn(TEntity entity)
         {
             var res = await Entities.AddAsync(entity).ConfigureAwait(false);
-            if (res == null) return null;
             await _db.SaveChangesAsync();
             return res.Entity;
         }
@@ -54,7 +53,7 @@ namespace Dal.Repository
         public virtual async Task<IReadOnlyCollection<TEntity>> FindByConditionAsync(Expression<Func<TEntity, bool>> conditon)
             => await Entities.Where(conditon).ToListAsync().ConfigureAwait(false);
 
-        public virtual async Task<IReadOnlyCollection<TEntity>> FindByConditions(List<Expression<Func<TEntity, bool>>> conditons)
+        public async Task<IReadOnlyCollection<TEntity>> FindByConditions(List<Expression<Func<TEntity, bool>>> conditons)
         {
             IQueryable<TEntity> entities = Entities;
             foreach (var conditon in conditons)

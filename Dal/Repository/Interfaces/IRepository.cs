@@ -15,7 +15,7 @@ namespace Dal.Repository.Interfaces
         // Create
         Task Create(TEntity entity);
 
-        Task<TEntity> CreateReturn(TEntity entity);
+        Task<TEntity?> CreateReturn(TEntity entity);
 
         /// <summary> Universal delete </summary>
         Task DeleteOne(Expression<Func<TEntity, bool>> condition);

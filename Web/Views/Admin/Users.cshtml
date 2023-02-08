@@ -1,0 +1,67 @@
+﻿@using Web.Controllers;
+@using Web.Models;
+@model IEnumerable<UserViewModel>
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<h1 class="mb-5 mt-4 text-center">Manage users</h1>
+
+<form asp-action="@nameof(AdminController.Users)" asp-controller="Admin" method="get" class="row my-4">
+    <div class="col input-group">
+        <input name="Id" class="form-control" placeholder="Id" />
+        <input name="Name" class="form-control" placeholder="Name" />
+        <input name="Email" class="form-control" placeholder="Email" />
+    </div>
+    <div class="col-auto">
+        <input type="submit" value="Find" class="btn btn-success" />
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => user.Id)</td>
+                <td>@Html.DisplayFor(modelItem => user.Name)</td>
+                <td>@Html.DisplayFor(modelItem => user.Email)</td>
+                <td>
+                    @if (user.IsBannedAsBuyer)
+                    {
+                        <a asp-action="@nameof(AdminController.UnbanBuyer)" asp-controller="Admin" asp-route-id="@user.Id" asp-route-redirect="@ViewBag.Url" class="btn btn-sm btn-info">Unban as Buyer</a>
+                    }
+                    else
+                    {
+                                <a asp-action="@nameof(AdminController.BanBuyer)" asp-controller="Admin" asp-route-id="@user.Id" asp-route-redirect="@ViewBag.Url" class="btn btn-sm btn-danger">Ban as Buyer</a>
+                    }
+                    @if (user.IsBannedAsSeller)
+                    {
+                                <a asp-action="@nameof(AdminController.UnbanSeller)" asp-controller="Admin" asp-route-id="@user.Id" asp-route-redirect="@ViewBag.Url" class="btn btn-sm btn-info">Unban as Seller</a>
+                    }
+                    else
+                    {
+                                <a asp-action="@nameof(AdminController.BanSeller)" asp-controller="Admin" asp-route-id="@user.Id" asp-route-redirect="@ViewBag.Url" class="btn btn-sm btn-danger">Ban as Seller</a>
+                    }
+                    @if (user.IsAdmin)
+                    {
+                        <a asp-action="@nameof(AdminController.UnmakeAdmin)" asp-controller="Admin" asp-route-id="@user.Id" class="btn btn-sm btn-light">Unmake admin</a>
+                    }
+                    else
+                    {
+                        <a asp-action="@nameof(AdminController.MakeAdmin)" asp-controller="Admin" asp-route-id="@user.Id" class="btn btn-sm btn-dark">Make admin</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,6 +1,7 @@
 ﻿using Bll.Models;
 using Dal.UnitOfWork;
 using Domain.Models;
+using Microsoft.Extensions.Hosting;
 using System.Linq.Expressions;
 
 namespace Bll.Services
@@ -8,19 +9,22 @@ namespace Bll.Services
     public class LotService
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly LotCloserService lotCloser;
 
-        public LotService(IUnitOfWork unitOfWork)
+        public LotService(IUnitOfWork unitOfWork, IEnumerable<IHostedService> hostedService)
         {
             this.unitOfWork = unitOfWork;
+            lotCloser = (LotCloserService)hostedService.First(s => s.GetType() == typeof(LotCloserService));
         }
 
-        public async Task<Lot> CreateAsync(Lot product)
+        public async Task<Lot?> CreateAsync(Lot product)
         {
-            if (product != null)
+            var res = await unitOfWork.LotRepository.CreateReturn(product);
+            if (res != null)
             {
-                return await unitOfWork.LotRepository.CreateReturn(product);
+                lotCloser.AddToOrder(new WaitingLot(res.Id, res.CloseTime));
             }
-            return null;
+            return res;
         }
 
         public async Task Delete(int id)
@@ -33,7 +37,9 @@ namespace Bll.Services
             return await unitOfWork.LotRepository.FindByConditionAsync(conditon);
         }
 
-        public async Task<Lot> FirstOrDefault(Expression<Func<Lot, bool>> conditon)
+        public async Task<Lot?> GetOne(int id) => await unitOfWork.LotRepository.GetByIdWithImages(id);
+
+        public async Task<Lot?> FirstOrDefault(Expression<Func<Lot, bool>> conditon)
         {
             return await unitOfWork.LotRepository.FirstOrDefault(conditon);
         }
@@ -93,6 +99,13 @@ namespace Bll.Services
             }
             else return;
             await unitOfWork.LotRepository.Edit(lot);
+        }
+
+        public async Task Expired(int lotId)
+        {
+            var lot = await unitOfWork.LotRepository.GetById(lotId);
+            if (lot == null) return;
+            await unitOfWork.LotRepository.UpdateStatus(lot.Id, true);
         }
     }
 }

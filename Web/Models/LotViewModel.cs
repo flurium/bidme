@@ -9,11 +9,10 @@ namespace Web.Models
         public double Price { get; set; }
         public string Description { get; set; }
 
-        public string CloseTime { get; set; }
-
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
         public IFormFileCollection Url { get; set; }
+        public string CloseTime { get; internal set; }
     }
 }

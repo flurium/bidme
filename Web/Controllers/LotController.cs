@@ -9,8 +9,6 @@ namespace Web.Controllers
 {
     public class LotController : Controller
     {
-        public static string Name => "lot";
-
         private readonly LotService _lotService;
         private readonly CategoryService _categoryService;
         private readonly LotImageService _lotImageService;
@@ -24,13 +22,14 @@ namespace Web.Controllers
             _host = webHost;
         }
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Index()
         {
-            var res = await _lotService.GetOne(id);
+            var res = await _lotService.FirstOrDefault(x => x.Id == 4);
 
-            if (res == null) return RedirectToAction(nameof(HomeController.Index), HomeController.Name);
-
-            if (res.CloseTime <= DateTime.Now && res.IsClosed == false) await _lotService.Expired(res.Id);
+            if (res.CloseTime >= DateTime.Now)
+            {
+                await _lotService.Expired(res.Id);
+            }
 
             return View(res);
         }
@@ -59,6 +58,9 @@ namespace Web.Controllers
                 case "7":
                     time.AddDays(7.0);
                     break;
+
+                default:
+                    break;
             }
             Lot lot = new()
             {
@@ -66,7 +68,8 @@ namespace Web.Controllers
                 Price = lotView.Price,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 Description = lotView.Description,
-                CategoryId = lotView.CategoryId
+                CategoryId = lotView.CategoryId,
+                CloseTime = time
             };
             var res = await _lotService.CreateAsync(lot);
 

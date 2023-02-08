@@ -104,13 +104,8 @@ namespace Bll.Services
         public async Task Expired(int lotId)
         {
             var lot = await unitOfWork.LotRepository.GetById(lotId);
-
-            if (lot != null)
-            {
-                lot.IsClosed = true;
-            }
-            else return;
-            await unitOfWork.LotRepository.Edit(lot);
+            if (lot == null) return;
+            await unitOfWork.LotRepository.UpdateStatus(lot.Id, true);
         }
     }
 }

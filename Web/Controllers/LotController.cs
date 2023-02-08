@@ -50,12 +50,15 @@ namespace Web.Controllers
                 case "1":
                     time.AddDays(1.0);
                     break;
+
                 case "3":
                     time.AddDays(3.0);
                     break;
+
                 case "7":
                     time.AddDays(7.0);
                     break;
+
                 default:
                     break;
             }
@@ -66,12 +69,12 @@ namespace Web.Controllers
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 Description = lotView.Description,
                 CategoryId = lotView.CategoryId,
-                CloseTime = time           
+                CloseTime = time
             };
             var res = await _lotService.CreateAsync(lot);
 
             await _lotImageService.AddToServer(res, lotView.Url);
-          
+
             return RedirectToAction("RequiredProperty", "Product", new { res.CategoryId, ProductId = res.Id });
         }
 

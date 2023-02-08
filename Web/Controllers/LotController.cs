@@ -47,16 +47,16 @@ namespace Web.Controllers
             var time = DateTime.Now;
             switch (lotView.CloseTime)
             {
-                case "1":
-                    time.AddDays(1.0);
+                case "One":
+                    time = time.AddDays(1.0);
                     break;
 
-                case "3":
-                    time.AddDays(3.0);
+                case "Three":
+                    time = time.AddDays(3.0);
                     break;
 
-                case "7":
-                    time.AddDays(7.0);
+                case "Seven":
+                    time = time.AddDays(7.0);
                     break;
             }
             Lot lot = new()
@@ -64,6 +64,7 @@ namespace Web.Controllers
                 Name = lotView.Name,
                 Price = lotView.Price,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                CloseTime = time,
                 Description = lotView.Description,
                 CategoryId = lotView.CategoryId
             };

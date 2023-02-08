@@ -20,10 +20,7 @@ namespace Bll.Services
         public async Task<Lot?> CreateAsync(Lot product)
         {
             var res = await unitOfWork.LotRepository.CreateReturn(product);
-            if (res != null)
-            {
-                lotCloser.AddToOrder(new WaitingLot(res.Id, res.CloseTime));
-            }
+            if (res != null) lotCloser.AddToOrder(new WaitingLot(res.Id, res.CloseTime));
             return res;
         }
 

@@ -1,15 +1,14 @@
-﻿using Domain.Models;
-using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using Bll.Models;
+using Domain.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Linq.Expressions;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using Bll.Models;
+using System.Linq.Expressions;
 
 namespace Bll.Services
 {
     public class BanService
     {
-        
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;

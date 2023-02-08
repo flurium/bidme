@@ -1,6 +1,7 @@
 ﻿using Bll.Models;
 using Dal.UnitOfWork;
 using Domain.Models;
+using Microsoft.Extensions.Hosting;
 using System.Linq.Expressions;
 
 namespace Bll.Services
@@ -8,19 +9,22 @@ namespace Bll.Services
     public class LotService
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly LotCloserService lotCloser;
 
-        public LotService(IUnitOfWork unitOfWork)
+        public LotService(IUnitOfWork unitOfWork, IEnumerable<IHostedService> hostedService)
         {
             this.unitOfWork = unitOfWork;
+            lotCloser = (LotCloserService)hostedService.First(s => s.GetType() == typeof(LotCloserService));
         }
 
-        public async Task<Lot> CreateAsync(Lot product)
+        public async Task<Lot?> CreateAsync(Lot product)
         {
-            if (product != null)
+            var res = await unitOfWork.LotRepository.CreateReturn(product);
+            if (res != null)
             {
-                return await unitOfWork.LotRepository.CreateReturn(product);
+                lotCloser.AddToOrder(new WaitingLot(res.Id, res.CloseTime));
             }
-            return null;
+            return res;
         }
 
         public async Task Delete(int id)

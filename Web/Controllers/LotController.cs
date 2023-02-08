@@ -3,7 +3,6 @@ using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Web.Models;
-using Bll.Models;
 
 namespace Web.Controllers
 {
@@ -15,16 +14,13 @@ namespace Web.Controllers
         private readonly CategoryService _categoryService;
         private readonly LotImageService _lotImageService;
         private readonly IWebHostEnvironment _host;
-        private readonly LotCloserService _lotCloser;
 
-        public LotController(LotService productService, CategoryService categoryService, LotImageService productImageService, IWebHostEnvironment webHost,
-            LotCloserService lotCloser)
+        public LotController(LotService productService, CategoryService categoryService, LotImageService productImageService, IWebHostEnvironment webHost)
         {
             _lotService = productService;
             _lotImageService = productImageService;
             _categoryService = categoryService;
             _host = webHost;
-            _lotCloser = lotCloser;
         }
 
         public async Task<IActionResult> Details(int id)
@@ -50,7 +46,7 @@ namespace Web.Controllers
                 Price = lotView.Price,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 Description = lotView.Description,
-                CategoryId = lotView.CategoryId
+                CategoryId = 2//lotView.CategoryId
             };
             var res = await _lotService.CreateAsync(lot);
 
@@ -75,9 +71,6 @@ namespace Web.Controllers
 
                 await _lotImageService.CreateAsync(img);
             }
-
-            // Should be tested
-            if (res != null) _lotCloser.AddToOrder(new WaitingLot(res.Id, res.CloseTime));
 
             return RedirectToAction("RequiredProperty", "Product", new { res.CategoryId, ProductId = res.Id });
         }

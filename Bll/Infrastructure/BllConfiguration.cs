@@ -21,14 +21,14 @@ namespace Bll.Infrastructure
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IEmailSender, EmailSenderService>();
 
+            // Background
+            services.AddHostedService<LotCloserService>();
+
             // Services
             services.AddScoped<LotService>();
             services.AddScoped<CategoryService>();
             services.AddScoped<LotImageService>();
             services.AddScoped<OrderService>();
-
-            // Background
-            services.AddHostedService<LotCloserService>();
         }
     }
 }

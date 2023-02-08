@@ -9,6 +9,8 @@ namespace Web.Controllers
 {
     public class LotController : Controller
     {
+        public static string Name => "lot";
+
         private readonly LotService _lotService;
         private readonly CategoryService _categoryService;
         private readonly LotImageService _lotImageService;
@@ -22,14 +24,13 @@ namespace Web.Controllers
             _host = webHost;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Details(int id)
         {
-            var res = await _lotService.FirstOrDefault(x => x.Id == 4);
+            var res = await _lotService.GetOne(id);
 
-            if (res.CloseTime >= DateTime.Now)
-            {
-                await _lotService.Expired(res.Id);
-            }
+            if (res == null) return RedirectToAction(nameof(HomeController.Index), HomeController.Name);
+
+            if (res.CloseTime <= DateTime.Now && res.IsClosed == false) await _lotService.Expired(res.Id);
 
             return View(res);
         }
@@ -50,13 +51,13 @@ namespace Web.Controllers
                 case "1":
                     time.AddDays(1.0);
                     break;
+
                 case "3":
                     time.AddDays(3.0);
                     break;
+
                 case "7":
                     time.AddDays(7.0);
-                    break;
-                default:
                     break;
             }
             Lot lot = new()
@@ -65,13 +66,12 @@ namespace Web.Controllers
                 Price = lotView.Price,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 Description = lotView.Description,
-                CategoryId = lotView.CategoryId,
-                CloseTime = time           
+                CategoryId = lotView.CategoryId
             };
             var res = await _lotService.CreateAsync(lot);
 
             await _lotImageService.AddToServer(res, lotView.Url);
-          
+
             return RedirectToAction("RequiredProperty", "Product", new { res.CategoryId, ProductId = res.Id });
         }
 

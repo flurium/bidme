@@ -70,28 +70,8 @@ namespace Web.Controllers
             };
             var res = await _lotService.CreateAsync(lot);
 
-            string filePath = Path.Combine(_host.WebRootPath, "Images");
-            if (!Directory.Exists(filePath))
-            {
-                Directory.CreateDirectory(filePath);
-            }
-
-            foreach (var uploadedFile in lotView.Url)
-            {
-                // путь к папке Files
-                string path = "/Images/" + uploadedFile.FileName;
-
-                // сохраняем файл в папку Files в каталоге wwwroot
-                using (var fileStream = new FileStream(_host.WebRootPath + path, FileMode.Create))
-                {
-                    await uploadedFile.CopyToAsync(fileStream);
-                }
-
-                LotImage img = new() { LotId = res.Id, Path = path };
-
-                await _lotImageService.CreateAsync(img);
-            }
-
+            await _lotImageService.AddToServer(res, lotView.Url);
+          
             return RedirectToAction("RequiredProperty", "Product", new { res.CategoryId, ProductId = res.Id });
         }
 

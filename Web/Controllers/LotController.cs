@@ -1,6 +1,7 @@
 ﻿using Bll.Services;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Security.Claims;
 using Web.Models;
 
@@ -25,53 +26,55 @@ namespace Web.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
+            var res = await _lotService.FirstOrDefault(x => x.Id == 4);
+
+            if (res.CloseTime >= DateTime.Now)
+            {
+                await _lotService.Expired(res.Id);
+            }
+
             var res = await _lotService.GetOne(id);
             if (res == null) return RedirectToAction(nameof(HomeController.Index), HomeController.Name);
             return View(res);
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            // ViewBag.Categories = await _categoryService.List();
+            ViewBag.Categories = await _categoryService.List();
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(LotViewModel lotView)
         {
+            var time = DateTime.Now;
+            switch (lotView.CloseTime)
+            {
+                case "1":
+                    time.AddDays(1.0);
+                    break;
+                case "3":
+                    time.AddDays(3.0);
+                    break;
+                case "7":
+                    time.AddDays(7.0);
+                    break;
+                default:
+                    break;
+            }
             Lot lot = new()
             {
                 Name = lotView.Name,
                 Price = lotView.Price,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 Description = lotView.Description,
-                CategoryId = 2//lotView.CategoryId
+                CategoryId = lotView.CategoryId
             };
             var res = await _lotService.CreateAsync(lot);
 
-            string filePath = Path.Combine(_host.WebRootPath, "Images");
-            if (!Directory.Exists(filePath))
-            {
-                Directory.CreateDirectory(filePath);
-            }
-
-            foreach (var uploadedFile in lotView.Url)
-            {
-                // путь к папке Files
-                string path = "/Images/" + uploadedFile.FileName;
-
-                // сохраняем файл в папку Files в каталоге wwwroot
-                using (var fileStream = new FileStream(_host.WebRootPath + path, FileMode.Create))
-                {
-                    await uploadedFile.CopyToAsync(fileStream);
-                }
-
-                LotImage img = new() { LotId = res.Id, Path = path };
-
-                await _lotImageService.CreateAsync(img);
-            }
-
+            await _lotImageService.AddToServer(res, lotView.Url);
+          
             return RedirectToAction("RequiredProperty", "Product", new { res.CategoryId, ProductId = res.Id });
         }
 

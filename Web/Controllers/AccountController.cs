@@ -37,7 +37,7 @@ namespace Web.Controllers
             var res = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, true, false);
             if (res.Succeeded)
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(LotController.Index), "Home");
             }
             return View("Error");
         }
@@ -104,7 +104,7 @@ namespace Web.Controllers
         public IActionResult Logout()
         {
             _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(LotController.Index), "Home");
         }
     }
 }

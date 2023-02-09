@@ -11,6 +11,8 @@ namespace Web.Controllers
     [Authorize(Roles = Role.Admin)]
     public class AdminController : Controller
     {
+        public static string Name => "admin";
+
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
         private readonly BanService _banService;

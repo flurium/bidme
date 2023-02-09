@@ -1,6 +1,7 @@
 ﻿using Bll.Models;
 using Dal.UnitOfWork;
 using Domain.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using System.Linq.Expressions;
 
@@ -10,23 +11,30 @@ namespace Bll.Services
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly LotCloserService lotCloser;
+        private readonly LotImageService lotImageService;
 
-        public LotService(IUnitOfWork unitOfWork, IEnumerable<IHostedService> hostedService)
+        public LotService(IUnitOfWork unitOfWork, IEnumerable<IHostedService> hostedService, LotImageService lotImageService)
         {
             this.unitOfWork = unitOfWork;
             lotCloser = (LotCloserService)hostedService.First(s => s.GetType() == typeof(LotCloserService));
+            this.lotImageService = lotImageService;
         }
 
-        public async Task<Lot?> CreateAsync(Lot product)
+        public async Task<Lot?> Create(Lot product, IFormFileCollection? files)
         {
             var res = await unitOfWork.LotRepository.CreateReturn(product);
-            if (res != null) lotCloser.AddToOrder(new WaitingLot(res.Id, res.CloseTime));
+            if (res == null) return null;
+
+            lotCloser.AddToWaitingOrder(new WaitingLot(res.Id, res.CloseTime));
+            if (files != null) await lotImageService.Add(res, files);
+
             return res;
         }
 
         public async Task Delete(int id)
         {
             await unitOfWork.LotRepository.DeleteOne(id);
+            await lotImageService.DeleteAll(id);
         }
 
         public async Task<IReadOnlyCollection<Lot>> FindByConditionAsync(Expression<Func<Lot, bool>> conditon)
@@ -65,21 +73,21 @@ namespace Bll.Services
             return await unitOfWork.CategoryRepository.OrderDescending(c => current.Contains(c.Name));
         }
 
-        public async Task<bool> MakeBid(double bid, int lotId, string userId)
+        public async Task<bool> MakeBid(double amount, int lotId, string userId)
         {
             var order = await unitOfWork.OrderRepository.MaxPrice(lotId);
 
-            if ((order == null) || (order.OrderPrice < bid))
+            if ((order == null) || (order.OrderPrice < amount))
             {
                 var user = await unitOfWork.OrderRepository.FindByConditionAsync(x => x.UserId == userId);
                 if (user != null)
                 {
                     var userOrder = user.First();
-                    userOrder.OrderPrice = bid;
+                    userOrder.OrderPrice = amount;
                     await unitOfWork.OrderRepository.Edit(userOrder);
                     return true;
                 }
-                await unitOfWork.OrderRepository.Create(new Order { OrderPrice = bid, LotId = lotId, UserId = userId });
+                await unitOfWork.OrderRepository.Create(new Order { OrderPrice = amount, LotId = lotId, UserId = userId });
                 return true;
             }
 

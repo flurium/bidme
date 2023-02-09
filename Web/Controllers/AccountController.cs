@@ -37,7 +37,7 @@ namespace Web.Controllers
             var res = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, true, false);
             if (res.Succeeded)
             {
-                return RedirectToAction(nameof(LotController.Index), "Home");
+                return RedirectToAction(nameof(LotController.Index), LotController.Name);
             }
             return View("Error");
         }
@@ -54,17 +54,23 @@ namespace Web.Controllers
         {
             var error = new RegisterViewModel();
             bool isError = false;
-            if ((registerViewModel.Name.Length > 21) || (registerViewModel.Name.Any(Char.IsWhiteSpace)))
+            if ((registerViewModel.Name.Length > 21) || registerViewModel.Name.Any(char.IsWhiteSpace))
             {
                 error.Name = "The Name is too long (Max Length=20) and there must be no spaces in the Name";
                 isError = true;
             }
-            if (!registerViewModel.Email.Contains("@") || registerViewModel.Email.Length < 5)
+            if (!registerViewModel.Email.Contains('@') || registerViewModel.Email.Length < 5)
             {
                 error.Email = "Email must be more than 5 characters long and must contain '@'";
                 isError = true;
             }
-            if ((!registerViewModel.Password.Any(Char.IsUpper)) || (!registerViewModel.Password.Any(Char.IsLower)) || (!registerViewModel.Password.Any(Char.IsNumber)) || (registerViewModel.Password.Length < 6) || (!registerViewModel.Password.Any(Char.IsPunctuation)))
+            if (
+                registerViewModel.Password.Length < 6 ||
+                !registerViewModel.Password.Any(char.IsUpper) ||
+                !registerViewModel.Password.Any(char.IsLower) ||
+                !registerViewModel.Password.Any(char.IsNumber) ||
+                !registerViewModel.Password.Any(char.IsPunctuation)
+                )
             {
                 error.Password = "Password must be at least 6 characters, at least one A-Z, a-z and a special character";
                 isError = true;
@@ -104,7 +110,7 @@ namespace Web.Controllers
         public IActionResult Logout()
         {
             _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(LotController.Index), "Home");
+            return RedirectToAction(nameof(LotController.Index), LotController.Name);
         }
     }
 }

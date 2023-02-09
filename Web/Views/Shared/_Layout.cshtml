@@ -34,6 +34,9 @@
                             <li class="nav-item">
                               <a class="nav-link">Hello @User.Identity.Name</a>
                             </li>
+                              <li class="nav-item">
+                              <a class="nav-link"  asp-controller="@UserController.Name" asp-action="@nameof(UserController.UserLots)">Profile</a>
+                            </li>
               <li class="nav-item me-0">
                               <a class="nav-link" asp-controller="@AccountController.Name" asp-action="@nameof(AccountController.Logout)">Logout</a>
                             </li>

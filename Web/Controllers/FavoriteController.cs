@@ -9,6 +9,7 @@ namespace Web.Controllers
     [Authorize]
     public class FavoriteController : Controller
     {
+        public static string Name => "favorite";
         private readonly FavoriteService _favoriteService;
 
         public FavoriteController(FavoriteService favoriteService)

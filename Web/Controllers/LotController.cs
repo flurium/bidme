@@ -85,7 +85,7 @@ namespace Web.Controllers
         [NotBannedAs(Roles = Role.BannedAsSeller)]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Categories = await _categoryService.List();
+            // ViewBag.Categories = await _categoryService.List();
             return View();
         }
 

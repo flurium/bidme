@@ -54,13 +54,30 @@ namespace Web.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var res = await _lotService.GetOne(id);
+            var res = await _lotService.GetDetails(id);
 
-            if (res == null) return RedirectToAction(nameof(LotController.Index), LotController.Name);
+            if (res == null) return RedirectToAction(nameof(LotController.Index));
 
-            if (res.CloseTime <= DateTime.Now && res.IsClosed == false) await _lotService.Expired(res.Id);
+            if (res.CloseTime <= DateTime.Now && res.IsClosed == false)
+            {
+                await _lotService.Expired(res.Id);
+                return RedirectToAction(nameof(LotController.Index));
+            }
 
-            return View(res);
+            var lastOrder = res.Orders.FirstOrDefault();
+
+            var details = new LotDetailsViewModel(
+                res.Id,
+                res.Name,
+                res.Images.Select(i => i.Path).ToArray(),
+                res.Price,
+                lastOrder != null ? lastOrder.OrderPrice : res.Price,
+                res.CloseTime,
+                res.IsClosed,
+                res.Description
+            );
+
+            return View(details);
         }
 
         [HttpGet]

@@ -67,5 +67,10 @@ namespace Dal.Repository
             entity.IsClosed = isClosed;
             await _db.SaveChangesAsync();
         }
+
+        public async Task<Lot?> GetByIdWithImagesOrders(int id)
+        {
+            return await Entities.Include(l => l.Images).Include(l => l.Orders).FirstOrDefaultAsync(p => p.Id == id);
+        }
     }
 }

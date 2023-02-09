@@ -17,6 +17,6 @@ namespace Dal.Repository
         public async Task<bool> IsFavoriteExistsAsync(Favorite favorite) => await Entities.AnyAsync(f => f.UserId == favorite.UserId && f.LotId == favorite.LotId).ConfigureAwait(false);
 
         public virtual async Task<IReadOnlyCollection<Favorite>> FindIncludeLotsAsync(Expression<Func<Favorite, bool>> conditon)
-              => await Entities.Include(f => f.Lot).Where(conditon).ToListAsync().ConfigureAwait(false);
+              => await Entities.Include(f => f.Lot).ThenInclude(l=>l.Images).Where(conditon).ToListAsync().ConfigureAwait(false);
     }
 }

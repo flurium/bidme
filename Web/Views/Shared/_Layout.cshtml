@@ -41,6 +41,9 @@
               <li class="nav-item me-0">
                               <a class="nav-link" asp-controller="@AccountController.Name" asp-action="@nameof(AccountController.Logout)">Logout</a>
                             </li>
+                                     <li class="nav-item me-0">
+                                      <a class="nav-link" asp-controller="@FavoriteController.Name" asp-action="@nameof(FavoriteController.Index)">Favorites</a>
+                                </li>
                         }
                         else   
                         {

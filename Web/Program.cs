@@ -85,7 +85,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: $"{{controller={HomeController.Name}}}/{{action={nameof(HomeController.Index)}}}/{{id?}}");
+    pattern: $"{{controller={LotController.Name}}}/{{action={nameof(LotController.Index)}}}/{{id?}}");
 
 app.MapControllerRoute(
     name: "emailConfirmation",

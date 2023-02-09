@@ -19,7 +19,7 @@ namespace Bll.Services
             this.services = services;
         }
 
-        public void AddToOrder(WaitingLot lot)
+        public void AddToWaitingOrder(WaitingLot lot)
         {
             var place = FindPlaceForNew(lot.CloseTime);
             if (place != null) order.AddAfter(place, lot);

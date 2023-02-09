@@ -24,7 +24,7 @@ namespace Web.Controllers
             _banService = banService;
         }
 
-        [Authorize(Roles = "")]
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var roleExists = await _roleManager.RoleExistsAsync(Role.Admin);
@@ -39,6 +39,8 @@ namespace Web.Controllers
             else
             {
                 await _roleManager.CreateAsync(new IdentityRole(Role.Admin));
+                await _roleManager.CreateAsync(new IdentityRole(Role.BannedAsBuyer));
+                await _roleManager.CreateAsync(new IdentityRole(Role.BannedAsSeller));
             }
 
             if (adminExists) return View("Error");

@@ -25,8 +25,13 @@
                                                 <input type="hidden" name="Id" value="@favorite.Lot.Id" />
                                         <input type="submit" class="btn btn-outline-primary btn-sm" value="Delete from favorites" />
                                     </form>
+                                 <form asp-controller="@LotController.Name" asp-action="@nameof(LotController.Details)"  method="post">
+                                                    <input type="hidden" name="id" value="@favorite.Lot.Id" />
+                                                <input type="submit" class="btn btn-outline-primary btn-sm" value="Details" />
+                                 </form>
+                        
                         }
-                               @*<a class="btn btn-sm btn-outline-primary" asp-action="@nameof(LotController.Details)" asp-route-id="@favorite.Lot.Id">Details</a>*@
+                               
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
 ﻿@using Domain.Models
+@using Web.Controllers;
 @model Lot
 
 <div class="row row-cols-md-2 g-3">
@@ -43,19 +44,19 @@
     <h2>@Model.Name</h2>
     <p class="fw-bold">@Model.Price</p>
 
-    @if(!Model.IsClosed)
-    {
-      <button>Mate a bet</button>
-    } 
+    <p>Will be closed on: @Model.CloseTime.ToLongTimeString()</p>
+
+    <p>@Model.Description</p>
+    
+    <form asp-action="@nameof(LotController.MakeBid)" asp-controller="@LotController.Name" method="post">
+      <input type="hidden" value="@Model.Id" name="id" />
+      <input type="number" class="form-control" name="amount" />
+      <input type="submit" class="btn btn-primary" value="Make a bid" />
+    </form>
+
+
+    <a class="btn btn-sm btn-outline-secondary">Add to favorits</a>
+
   </div>
   
 </div>
-
-
-<form action="MakeBid"   method="post">
-
-
-<input type="hidden" value="@Model.Id" name="productId"/>
-<input type="number" name="bid"/>
-<input type="submit" value="Save"/>
-</form>

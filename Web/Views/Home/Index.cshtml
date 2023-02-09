@@ -6,7 +6,7 @@
 }
 
 <!-- Search and filter form -->
-<form class="mb-3 mt-4" asp-controller="@HomeController.Name" asp-action="@nameof(HomeController.Index)" method="get">
+<form class="mb-3 mt-4" asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)" method="get">
   <div class="input-group">
     <input class="form-control" placeholder="Enter name of lot you want to search" aria-label="Search" name="name" aria-describedby="btn-search">
     <button class="btn btn-primary" type="submit" id="btn-search">Search</button>
@@ -27,14 +27,14 @@
     @if(Model.SelectedCategories.Contains(category.Name)) {
 
     <a class="btn btn-primary btn-sm"
-      asp-controller="@HomeController.Name" asp-action="@nameof(HomeController.Index)"
+     asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)"
       asp-route-categories="@string.Join(',', Model.SelectedCategories.Where(c => c != category.Name))"
     >
       @category.Name
     </a>
     } else {
       <a class="btn btn-light btn-sm"
-     asp-controller="@HomeController.Name" asp-action="@nameof(HomeController.Index)"
+     asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)"
      asp-route-categories="@string.Join(',', Model.SelectedCategories.Append(category.Name))">
       @category.Name
     </a>

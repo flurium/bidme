@@ -1,0 +1,36 @@
+﻿@using Domain.Models
+@using Web.Controllers;
+@model IReadOnlyCollection<Favorite>
+
+<h1 class="mb-5 mt-4 text-center">Favorites</h1>
+
+<div class="row g-4">
+    @foreach (var favorite in Model)
+    {
+            <div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
+                <div class="card">
+                    <div class="card-body">
+                    @if (favorite.Lot.Images.Count != 0)
+                    {
+                         <img src="@favorite.Lot.Images.ElementAt(0).Path" class="card-img-top mb-3" width="250" height="280" alt="@favorite.Lot.Name" />
+                    }
+                        <div class="mb-3">
+                                <h5 class="mb-3">@favorite.Lot.Name</h5>
+                                <p class="fs-5 fw-bold my-1">@favorite.Lot.Price $</p>
+                        </div>
+                        <div class="d-flex gap-3 align-items-center pb-2 mb-1">
+                        @if (User.Identity != null && User.Identity.Name != null)
+                        {
+                                    <form asp-controller="@FavoriteController.Name" asp-action="@nameof(FavoriteController.DeleteFavorite)" method="post">
+                                                <input type="hidden" name="Id" value="@favorite.Lot.Id" />
+                                        <input type="submit" class="btn btn-outline-primary btn-sm" value="Delete from favorites" />
+                                    </form>
+                        }
+                               @*<a class="btn btn-sm btn-outline-primary" asp-action="@nameof(LotController.Details)" asp-route-id="@favorite.Lot.Id">Details</a>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+    }
+</div>
+

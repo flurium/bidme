@@ -17,6 +17,8 @@ namespace Dal.Repository.Interfaces
 
         Task<Lot?> GetByIdWithImages(int id);
 
+        Task<Lot?> GetByIdWithImagesOrders(int id);
+
         Task<IReadOnlyCollection<Lot>> FindMany<TKey>(Expression<Func<Lot, bool>> find, Expression<Func<Lot, TKey>> order, bool orderDescending);
     }
 }

@@ -44,9 +44,9 @@ namespace Bll.Services
 
         public async Task<Lot?> GetOne(int id) => await unitOfWork.LotRepository.GetByIdWithImages(id);
 
-        public async Task<Lot?> FirstOrDefault(Expression<Func<Lot, bool>> conditon)
+        public async Task<Lot?> GetDetails(int id)
         {
-            return await unitOfWork.LotRepository.FirstOrDefault(conditon);
+            return await unitOfWork.LotRepository.GetByIdWithImagesOrders(id);
         }
 
         public async Task<IReadOnlyCollection<Lot>> FilterLots(LotFilter filter)

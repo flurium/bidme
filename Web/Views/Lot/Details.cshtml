@@ -1,17 +1,18 @@
-﻿@using Domain.Models
+﻿@using Bll.Models;
+@using Domain.Models
 @using Web.Controllers;
-@model Lot
+@model LotDetailsViewModel
 
-<div class="row row-cols-md-2 g-3">
+<div class="row g-3">
 
   @if(Model.Images != null && Model.Images.Count > 0)
   {
     <!-- Carousel of images -->
-    <div id="images" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner">
+    <div id="images" class="carousel slide col-md-6 col-lg-5" data-bs-ride="carousel">
+      <div class="carousel-inner sticky-md-top" style="top:1rem;">
         
         <div class="carousel-item active">
-          <img src="@Model.Images.ElementAt(0).Path" class="d-block w-100" alt="@Model.Name image">
+          <img src="@Model.Images.ElementAt(0)" class="d-block w-100" alt="@Model.Name image">
         </div>
         
         @if(Model.Images.Count > 1)
@@ -40,23 +41,29 @@
     </div>
   }
 
-  <div>
-    <h2>@Model.Name</h2>
-    <p class="fw-bold">@Model.Price</p>
+  <div class="col">
+    <h1>@Model.Name</h1>
+    <small class=" pb-3">Will be closed on: @Model.CloseTime.ToString()</small>
 
-    <p>Will be closed on: @Model.CloseTime.ToLongTimeString()</p>
+    <div class="row row-cols-2 mb-3">
+      <p class="fw-bold">Current price: @Model.StartPrice $</p>
+      <p class="">Start price: @Model.CurrentPrice $</p>
+    </div>
 
-    <p>@Model.Description</p>
+
     
     <form asp-action="@nameof(LotController.MakeBid)" asp-controller="@LotController.Name" method="post">
       <input type="hidden" value="@Model.Id" name="id" />
-      <input type="number" class="form-control" name="amount" />
-      <input type="submit" class="btn btn-primary" value="Make a bid" />
+      <div class="input-group">
+        <input type="number" class="form-control" name="amount" aria-label="Amount" aria-describedby="btn-make-bid" min="@Model.CurrentPrice" value="@(Model.CurrentPrice+1)" />
+        <input type="submit" class="btn btn-primary" value="Make a bid" id="btn-make-bid" />
+      </div>
     </form>
 
+    <a class="btn btn-sm btn-outline-secondary my-3">Add to favorits</a>
 
-    <a class="btn btn-sm btn-outline-secondary">Add to favorits</a>
-
+    <h3 class="mt-3">Description:</h3>
+    <p>@Model.Description</p>
   </div>
   
 </div>

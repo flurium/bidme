@@ -12,7 +12,7 @@
                     <div class="card-body">
                     @if (favorite.Lot.Images.Count != 0)
                     {
-                                     <img src="@favorite.Lot.Images.ElementAt(0).Path" class="card-img-top mb-3" width="250" height="280" alt="@favorite.Lot.Name" />
+                         <img src="@favorite.Lot.Images.ElementAt(0).Path" class="card-img-top mb-3" width="250" height="280" alt="@favorite.Lot.Name" />
                     }
                         <div class="mb-3">
                                 <h5 class="mb-3">@favorite.Lot.Name</h5>
@@ -25,10 +25,6 @@
                                                 <input type="hidden" name="Id" value="@favorite.Lot.Id" />
                                         <input type="submit" class="btn btn-outline-primary btn-sm" value="Delete from favorites" />
                                     </form>
-                                  @*  <form asp-controller="Cart" asp-action="@nameof(OrderController.AddToCart)" method="post">
-                                                <input type="hidden" name="productId" value="@favorite.Lot.Id" />
-                                        <input type="submit" class="btn btn-outline-primary btn-sm" value="Add to Orders" />
-                                    </form>*@
                         }
                                @*<a class="btn btn-sm btn-outline-primary" asp-action="@nameof(LotController.Details)" asp-route-id="@favorite.Lot.Id">Details</a>*@
                         </div>

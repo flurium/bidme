@@ -24,7 +24,7 @@ namespace Web.Controllers
             await _favoriteService.CreateAsync(favorite);
             }
 
-            return RedirectToAction(nameof(Favorites));
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> DeleteFavorite(int Id)
@@ -35,9 +35,9 @@ namespace Web.Controllers
                 await _favoriteService.DeleteAsync(favorite);
             }
 
-            return RedirectToAction(nameof(Favorites));
+            return RedirectToAction(nameof(Index));
         }
-        public async Task<IActionResult> Favorites()
+        public async Task<IActionResult> Index()
         {
             return View(await _favoriteService.FavoritesAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)));
         }

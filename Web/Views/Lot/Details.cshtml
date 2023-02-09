@@ -3,6 +3,10 @@
 @using Web.Controllers;
 @model LotDetailsViewModel
 
+@{
+  ViewData["Title"] = Model.Name;
+}
+
 <div class="row g-3">
 
   @if(Model.Images != null && Model.Images.Count > 0)

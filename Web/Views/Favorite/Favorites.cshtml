@@ -21,7 +21,7 @@
                         <div class="d-flex gap-3 align-items-center pb-2 mb-1">
                         @if (User.Identity != null && User.Identity.Name != null)
                         {
-                                    <form asp-controller="Favorite" asp-action="@nameof(FavoriteController.DeleteFavorite)" method="post">
+                                    <form asp-action="@nameof(FavoriteController.DeleteFavorite)" method="post">
                                                 <input type="hidden" name="Id" value="@favorite.Lot.Id" />
                                         <input type="submit" class="btn btn-outline-primary btn-sm" value="Delete from favorites" />
                                     </form>

@@ -7,15 +7,16 @@
 
 <!-- Search and filter form -->
 <form class="mb-3 mt-4" asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)" method="get">
+  <input hidden value="@string.Join(',', Model.SelectedCategories)" name="categories" />
   <div class="input-group">
-    <input class="form-control" placeholder="Enter name of lot you want to search" aria-label="Search" name="name" aria-describedby="btn-search">
+    <input class="form-control" placeholder="Enter name of lot you want to search" aria-label="Search" name="name" aria-describedby="btn-search" value="@Model.Filter.Name">
     <button class="btn btn-primary" type="submit" id="btn-search">Search</button>
   </div>
 
   <div class="input-group d-flex gap-3 mt-3 align-items-center">
     <label>Price</label>
-    <input type="number" class="form-control" placeholder="Min" name="min" min="0" />
-    <input type="number" class="form-control" placeholder="Max" name="max" />
+    <input type="number" class="form-control" placeholder="Min" name="min" min="0" value="@Model.Filter.MinPrice" />
+    <input type="number" class="form-control" placeholder="Max" name="max" value="@Model.Filter.MaxPrice" />
   </div>
 </form>
 
@@ -29,13 +30,14 @@
     <a class="btn btn-primary btn-sm"
      asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)"
       asp-route-categories="@string.Join(',', Model.SelectedCategories.Where(c => c != category.Name))"
-    >
+     asp-route-max="@Model.Filter.MaxPrice" asp-route-min="@Model.Filter.MinPrice" asp-route-name="@Model.Filter.Name">
       @category.Name
     </a>
     } else {
       <a class="btn btn-light btn-sm"
      asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)"
-     asp-route-categories="@string.Join(',', Model.SelectedCategories.Append(category.Name))">
+     asp-route-categories="@string.Join(',', Model.SelectedCategories.Append(category.Name))"
+     asp-route-max="@Model.Filter.MaxPrice" asp-route-min="@Model.Filter.MinPrice" asp-route-name="@Model.Filter.Name">
       @category.Name
     </a>
     }

@@ -1,11 +1,7 @@
 ﻿@using Domain.Models
 @using Web.Controllers
 @model List<Lot>
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+
 
 <div style="margin-bottom:1%">
     <a class="btn btn-light btn-sm" asp-controller="@UserController.Name" asp-action="@nameof(UserController.Lots)">Lots</a>
@@ -34,6 +30,8 @@
             <a class="btn btn-sm btn-outline-primary" asp-controller="@LotController.Name"
               asp-action="@nameof(LotController.Details)" asp-route-id="@lot.Id"
             >Details</a>
+            <a class="btn btn-sm btn-outline-danger" asp-controller="@LotController.Name" asp-route-redirect="@ViewBag.Route"
+             asp-action="@nameof(LotController.Delete)" asp-route-id="@lot.Id">Delete</a>
           </div>
         </div>
       </div>

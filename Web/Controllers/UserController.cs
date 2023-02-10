@@ -23,6 +23,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Lots()
         {
             ViewBag.Page = "I sell:";
+            ViewBag.Route = $"{Request.Path}{Request.QueryString}";
             var res = await _lotService.FindByConditionAsync(x => x.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier));
             return View("Profile", res);
         }

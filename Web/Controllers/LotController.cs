@@ -145,10 +145,10 @@ namespace Web.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, string redirect)
         {
             await _lotService.Delete(id);
-            return RedirectToAction("Profile", "Seller");
+            return Redirect(redirect);
         }
 
         [Authorize]

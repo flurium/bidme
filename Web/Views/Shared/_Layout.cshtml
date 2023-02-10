@@ -28,13 +28,13 @@
                     <ul class="navbar-nav flex-grow-1">
                       @if (User.Identity?.IsAuthenticated == true)
                         {
-                                     <li class="nav-item me-0">
+                                     <li class="nav-item">
                                       <a class="nav-link" asp-controller="@FavoriteController.Name" asp-action="@nameof(FavoriteController.Index)">Favorites</a>
                                       </li>
                         }
                       @if (User.IsInRole(Role.Admin))
                         {
-                                     <li class="nav-item me-0">
+                                     <li class="nav-item">
                                   <a class="nav-link" asp-controller="@AdminController.Name" asp-action="@nameof(AdminController.Users)">Admin</a>
                                   </li>
                                     

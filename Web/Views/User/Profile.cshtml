@@ -8,9 +8,10 @@
 }
 
 <div style="margin-bottom:1%">
-    <a class="btn btn-light btn-sm" asp-controller="@UserController.Name" asp-action="@nameof(UserController.UserLots)">Your Lots</a>
+    <a class="btn btn-light btn-sm" asp-controller="@UserController.Name" asp-action="@nameof(UserController.Lots)">Lots</a>
     <a class="btn btn-light btn-sm" asp-controller="@UserController.Name" asp-action="@nameof(UserController.Archive)" >Archive</a>
     <a class="btn btn-light btn-sm" asp-controller="@UserController.Name" asp-action="@nameof(UserController.Bids)" >Your Bids</a>
+    <a class="btn btn-light btn-sm" asp-controller="@AccountController.Name" asp-action="@nameof(AccountController.ChangeName)">Change UserName</a>
 </div>
 
 <h4>@ViewBag.Page</h4>

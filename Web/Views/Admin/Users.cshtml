@@ -6,9 +6,9 @@
     ViewData["Title"] = "Users";
 }
 
-<h1 class="mb-5 mt-4 text-center">Manage users</h1>
+<h1 class="mb-5 mt-4">Manage users</h1>
 
-<form asp-action="@nameof(AdminController.Users)" asp-controller="Admin" method="get" class="row my-4">
+<form asp-action="@nameof(AdminController.Users)" asp-controller="@AdminController.Name" method="get" class="row my-4">
     <div class="col input-group">
         <input name="Id" class="form-control" placeholder="Id" />
         <input name="Name" class="form-control" placeholder="Name" />
@@ -32,27 +32,27 @@
       <span>
         @if (user.IsBannedAsBuyer)
         {
-          <a asp-action="@nameof(AdminController.UnbanBuyer)" asp-controller="Admin" asp-route-id="@user.Id" asp-route-redirect="@ViewBag.Url" class="btn btn-sm btn-info">Unban as Buyer</a>
+          <a asp-action="@nameof(AdminController.UnbanBuyer)" asp-controller="@AdminController.Name" asp-route-id="@user.Id" asp-route-redirect="@ViewBag.Url" class="btn btn-sm btn-info">Unban as Buyer</a>
         }
         else
         {
-          <a asp-action="@nameof(AdminController.BanBuyer)" asp-controller="Admin" asp-route-id="@user.Id" asp-route-redirect="@ViewBag.Url" class="btn btn-sm btn-danger">Ban as Buyer</a>
+          <a asp-action="@nameof(AdminController.BanBuyer)" asp-controller="@AdminController.Name" asp-route-id="@user.Id" asp-route-redirect="@ViewBag.Url" class="btn btn-sm btn-danger">Ban as Buyer</a>
         }
         @if (user.IsBannedAsSeller)
         {
-          <a asp-action="@nameof(AdminController.UnbanSeller)" asp-controller="Admin" asp-route-id="@user.Id" asp-route-redirect="@ViewBag.Url" class="btn btn-sm btn-info">Unban as Seller</a>
+          <a asp-action="@nameof(AdminController.UnbanSeller)" asp-controller="@AdminController.Name" asp-route-id="@user.Id" asp-route-redirect="@ViewBag.Url" class="btn btn-sm btn-info">Unban as Seller</a>
         }
         else
         {
-          <a asp-action="@nameof(AdminController.BanSeller)" asp-controller="Admin" asp-route-id="@user.Id" asp-route-redirect="@ViewBag.Url" class="btn btn-sm btn-danger">Ban as Seller</a>
+          <a asp-action="@nameof(AdminController.BanSeller)" asp-controller="@AdminController.Name" asp-route-id="@user.Id" asp-route-redirect="@ViewBag.Url" class="btn btn-sm btn-danger">Ban as Seller</a>
         }
         @if (user.IsAdmin)
         {
-          <a asp-action="@nameof(AdminController.UnmakeAdmin)" asp-controller="Admin" asp-route-id="@user.Id" class="btn btn-sm btn-light">Unmake admin</a>
+          <a asp-action="@nameof(AdminController.UnmakeAdmin)" asp-controller="@AdminController.Name" asp-route-id="@user.Id" class="btn btn-sm btn-light">Unmake admin</a>
         }
         else
         {
-          <a asp-action="@nameof(AdminController.MakeAdmin)" asp-controller="Admin" asp-route-id="@user.Id" class="btn btn-sm btn-dark">Make admin</a>
+          <a asp-action="@nameof(AdminController.MakeAdmin)" asp-controller="@AdminController.Name" asp-route-id="@user.Id" class="btn btn-sm btn-dark">Make admin</a>
         }
       </span>
         </li>

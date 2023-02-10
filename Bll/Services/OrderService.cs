@@ -13,32 +13,9 @@ namespace Bll.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task CreateAsync(Order order)
+        public async Task<IReadOnlyCollection<Order>> UserOrders(string uid, bool isClosed)
         {
-            if (order != null)
-            {
-                await _unitOfWork.OrderRepository.Create(order);
-            }
-        }
-
-        public async Task DeleteAsync(string uId, int pId)
-        {
-            await _unitOfWork.OrderRepository.DeleteAsync(uId, pId);
-        }
-
-        public async Task<IReadOnlyCollection<Order>> FindIncludeProductsAsync(Expression<Func<Order, bool>> conditon)
-        {
-            return await _unitOfWork.OrderRepository.FindIncludeProductsAsync(conditon);
-        }
-
-        public async Task<Order?> Get(string uId, int pId)
-        {
-            return await _unitOfWork.OrderRepository.GetById(uId, pId);
-        }
-
-        public async Task<IReadOnlyCollection<Order>> FindByConditionAsync(Expression<Func<Order, bool>> conditon)
-        {
-            return await _unitOfWork.OrderRepository.FindByConditionAsync(conditon);
+            return await _unitOfWork.OrderRepository.FindIncludeProductsAsync(o => o.UserId == uid && o.Lot.IsClosed == isClosed);
         }
     }
 }

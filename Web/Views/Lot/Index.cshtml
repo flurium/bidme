@@ -7,15 +7,16 @@
 
 <!-- Search and filter form -->
 <form class="mb-3 mt-4" asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)" method="get">
+  <input hidden value="@string.Join(',', Model.SelectedCategories)" name="categories" />
   <div class="input-group">
-    <input class="form-control" placeholder="Enter name of lot you want to search" aria-label="Search" name="name" aria-describedby="btn-search">
+    <input class="form-control" placeholder="Enter name of lot you want to search" aria-label="Search" name="name" aria-describedby="btn-search" value="@Model.Filter.Name">
     <button class="btn btn-primary" type="submit" id="btn-search">Search</button>
   </div>
 
   <div class="input-group d-flex gap-3 mt-3 align-items-center">
     <label>Price</label>
-    <input type="number" class="form-control" placeholder="Min" name="min" min="0" />
-    <input type="number" class="form-control" placeholder="Max" name="max" />
+    <input type="number" class="form-control" placeholder="Min" name="min" min="0" value="@Model.Filter.MinPrice" />
+    <input type="number" class="form-control" placeholder="Max" name="max" value="@Model.Filter.MaxPrice" />
   </div>
 </form>
 
@@ -29,13 +30,14 @@
     <a class="btn btn-primary btn-sm"
      asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)"
       asp-route-categories="@string.Join(',', Model.SelectedCategories.Where(c => c != category.Name))"
-    >
+     asp-route-max="@Model.Filter.MaxPrice" asp-route-min="@Model.Filter.MinPrice" asp-route-name="@Model.Filter.Name">
       @category.Name
     </a>
     } else {
       <a class="btn btn-light btn-sm"
      asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)"
-     asp-route-categories="@string.Join(',', Model.SelectedCategories.Append(category.Name))">
+     asp-route-categories="@string.Join(',', Model.SelectedCategories.Append(category.Name))"
+     asp-route-max="@Model.Filter.MaxPrice" asp-route-min="@Model.Filter.MinPrice" asp-route-name="@Model.Filter.Name">
       @category.Name
     </a>
     }
@@ -52,25 +54,27 @@
         <div class="card-body">
           @if (lot.Images != null && lot.Images.Count != 0)
           {
-            <img src="@lot.Images.ElementAt(0).Path" class="card-img-top mb-3"  alt="@lot.Name image" />
+            <div class="text-center">
+            <img src="@lot.Images.ElementAt(0).Path" class="card-img-top mb-3" style="max-height:50vh; width:auto; max-width:100%" alt="@lot.Name image" />
+          </div>
           }
           <div class="mb-3">
             <h5 class="mb-3">@lot.Name</h5>
             <p class="fs-5 fw-bold my-1">@lot.Price $</p>
           </div>
-          <div class="d-flex gap-3 align-items-center pb-2 mb-1">
+          <div class="d-flex gap-3 align-items-center">
             @if (User.Identity != null && User.Identity.IsAuthenticated == true)
             {
 
               @if (lot.IsFavorite)
               {
-                <a class="btn btn-sm btn-outline-secondary my-3" asp-controller="@FavoriteController.Name"
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="@FavoriteController.Name"
              asp-action="@nameof(FavoriteController.DeleteFavorite)" asp-route-id="@lot.Id" asp-route-redirect="@Model.Route">Remove favorite</a>
 
               }
               else
               {
-                <a class="btn btn-sm btn-outline-secondary  my-3" asp-controller="@FavoriteController.Name"
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="@FavoriteController.Name"
              asp-action="@nameof(FavoriteController.AddFavorite)" asp-route-id="@lot.Id" asp-route-redirect="@Model.Route">Add to favorites</a>
               }
             }

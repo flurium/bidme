@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Bll.Models;
+using Domain.Models;
 
 namespace Web.Models
 {
@@ -11,5 +12,7 @@ namespace Web.Models
         public List<string> SelectedCategories { get; set; }
 
         public string Route { get; set; }
+
+        public LotFilter Filter { get; set; }
     }
 }

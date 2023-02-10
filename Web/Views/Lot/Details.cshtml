@@ -64,9 +64,16 @@
       </div>
     </form>
 
-       <a class="btn btn-sm btn-outline-secondary  my-3" asp-controller="@FavoriteController.Name"
-              asp-action="@nameof(FavoriteController.AddFavorite)" asp-route-id="@Model.Id"
-       >Add to favorites</a>
+    @if(Model.IsFavorite)
+    {
+      <a class="btn btn-sm btn-outline-secondary my-3" asp-controller="@FavoriteController.Name"
+       asp-action="@nameof(FavoriteController.DeleteFavorite)" asp-route-id="@Model.Id" asp-route-redirect="@Model.Route">Remove from favorites</a>
+
+    } else
+    {
+      <a class="btn btn-sm btn-outline-secondary  my-3" asp-controller="@FavoriteController.Name"
+        asp-action="@nameof(FavoriteController.AddFavorite)" asp-route-id="@Model.Id" asp-route-redirect="@Model.Route">Add to favorites</a>
+    }
 
     <h3 class="mt-3">Description:</h3>
     <p>@Model.Description</p>

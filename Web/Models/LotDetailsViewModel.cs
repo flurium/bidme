@@ -3,7 +3,7 @@
     public class LotDetailsViewModel
     {
         public LotDetailsViewModel(int id, string name, IReadOnlyCollection<string> images,
-            double startPrice, double currentPrice, DateTime closeTime, bool isClosed, string description)
+            double startPrice, double currentPrice, DateTime closeTime, bool isClosed, string description, string route, bool isFavorite)
         {
             Id = id;
             Name = name;
@@ -13,6 +13,8 @@
             CloseTime = closeTime;
             IsClosed = isClosed;
             Description = description;
+            Route = route;
+            IsFavorite = isFavorite;
         }
 
         public int Id { get; set; }
@@ -25,5 +27,8 @@
         public double CurrentPrice { get; set; }
         public DateTime CloseTime { get; set; }
         public bool IsClosed { get; set; }
+
+        public string Route { get; set; }
+        public bool IsFavorite { get; set; }
     }
 }

@@ -17,26 +17,26 @@ namespace Web.Controllers
             _favoriteService = favoriteService;
         }
 
-        public async Task<IActionResult> AddFavorite(int Id)
+        public async Task<IActionResult> AddFavorite(int id, string redirect)
         {
-            var favorite = new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), Id);
+            var favorite = new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), id);
             if (!await _favoriteService.IsExist(favorite))
             {
                 await _favoriteService.CreateAsync(favorite);
             }
 
-            return RedirectToAction(nameof(Index));
+            return Redirect(redirect);
         }
 
-        public async Task<IActionResult> DeleteFavorite(int Id)
+        public async Task<IActionResult> DeleteFavorite(int Id, string? redirect)
         {
             var favorite = new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), Id);
             if (await _favoriteService.IsExist(favorite))
             {
                 await _favoriteService.DeleteAsync(favorite);
             }
-
-            return RedirectToAction(nameof(Index));
+            if (redirect == null) return RedirectToAction(nameof(Index));
+            return Redirect(redirect);
         }
 
         public async Task<IActionResult> Index()

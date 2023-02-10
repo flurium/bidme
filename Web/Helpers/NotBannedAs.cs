@@ -17,7 +17,8 @@ namespace Web.Helpers
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if (context.HttpContext.User.IsInRole(role)) context.Result = new ViewResult { ViewName = "Banned" };
+            var isBanned = context.HttpContext.User.IsInRole(role);
+            if (isBanned) context.Result = new ViewResult { ViewName = "Banned" };
         }
     }
 }

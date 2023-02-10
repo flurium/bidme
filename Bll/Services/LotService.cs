@@ -112,5 +112,8 @@ namespace Bll.Services
             if (lot == null) return;
             await unitOfWork.LotRepository.UpdateStatus(lot.Id, true);
         }
+
+        
+   
     }
 }

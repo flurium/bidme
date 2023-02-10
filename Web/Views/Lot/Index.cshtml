@@ -58,19 +58,19 @@
             <h5 class="mb-3">@lot.Name</h5>
             <p class="fs-5 fw-bold my-1">@lot.Price $</p>
           </div>
-          <div class="d-flex gap-3 align-items-center pb-2 mb-1">
+          <div class="d-flex gap-3 align-items-center">
             @if (User.Identity != null && User.Identity.IsAuthenticated == true)
             {
 
               @if (lot.IsFavorite)
               {
-                <a class="btn btn-sm btn-outline-secondary my-3" asp-controller="@FavoriteController.Name"
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="@FavoriteController.Name"
              asp-action="@nameof(FavoriteController.DeleteFavorite)" asp-route-id="@lot.Id" asp-route-redirect="@Model.Route">Remove favorite</a>
 
               }
               else
               {
-                <a class="btn btn-sm btn-outline-secondary  my-3" asp-controller="@FavoriteController.Name"
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="@FavoriteController.Name"
              asp-action="@nameof(FavoriteController.AddFavorite)" asp-route-id="@lot.Id" asp-route-redirect="@Model.Route">Add to favorites</a>
               }
             }

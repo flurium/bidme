@@ -1,0 +1,29 @@
+﻿@using Web.Controllers;
+
+@{
+    ViewData["Title"] = "Change";
+}
+
+
+<div class="text-center my-5 pt-5">
+    <h1>Change UserName</h1>
+</div>
+
+<div class="row justify-content-center">
+    <form asp-action="@nameof(AccountController.ChangeName)" asp-controller="@AccountController.Name" class="col col-lg-8 col-xl-6 d-flex flex-column gap-4">
+        <div class="form-group">
+            <label class="control-label">Enter new username:</label>
+            <input name="nameNew"  class="form-control" placeholder="Username" />
+        </div>
+
+        <div class="form-group text-center">
+            <input type="submit" value="Change" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

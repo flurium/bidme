@@ -25,7 +25,11 @@
                 <input type="submit" value="Login" class="btn btn-primary" />
             </div>
         </form>
+    <div class="form-group text-center">
+        <a asp-action="@nameof(AccountController.ForgotPassword)">Forgot Password</a>
+    </div>
 </div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

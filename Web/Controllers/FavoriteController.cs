@@ -16,13 +16,13 @@ namespace Web.Controllers
         {
             _favoriteService = favoriteService;
         }
+
         public async Task<IActionResult> AddFavorite(int Id)
         {
-           
             var favorite = new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), Id);
             if (!await _favoriteService.IsExist(favorite))
             {
-            await _favoriteService.CreateAsync(favorite);
+                await _favoriteService.CreateAsync(favorite);
             }
 
             return RedirectToAction(nameof(Index));
@@ -38,6 +38,7 @@ namespace Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
         public async Task<IActionResult> Index()
         {
             return View(await _favoriteService.FavoritesAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)));

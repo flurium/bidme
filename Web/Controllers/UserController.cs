@@ -44,7 +44,5 @@ namespace Web.Controllers
             var res = await _orderService.FindIncludeProductsAsync(x => (x.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier)) && (x.Lot.IsClosed == false));
             return View("Lots", res);
         }
-
-
     }
 }

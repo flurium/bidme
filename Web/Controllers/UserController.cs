@@ -5,6 +5,7 @@ using System.Security.Claims;
 
 namespace Web.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         public static string Name => "user";
@@ -19,29 +20,26 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> UserLots()
+        public async Task<IActionResult> Lots()
         {
-            ViewBag.Page = "Your Lots";
+            ViewBag.Page = "I sell:";
             var res = await _lotService.FindByConditionAsync(x => x.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier));
             return View("Profile", res);
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> Archive()
         {
             ViewBag.Page = "Archive";
-            var res = await _orderService.FindIncludeProductsAsync(x => (x.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier)) && (x.Lot.IsClosed == true));
+            var res = await _orderService.UserOrders(User.FindFirstValue(ClaimTypes.NameIdentifier), true);
             return View("Lots", res);
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> Bids()
         {
-            ViewBag.Page = "Your bids";
-            var res = await _orderService.FindIncludeProductsAsync(x => (x.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier)) && (x.Lot.IsClosed == false));
+            ViewBag.Page = "Your currently active bids";
+            var res = await _orderService.UserOrders(User.FindFirstValue(ClaimTypes.NameIdentifier), false);
             return View("Lots", res);
         }
     }

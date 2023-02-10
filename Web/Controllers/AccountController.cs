@@ -116,6 +116,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult ChangeName()
         {
             return View();

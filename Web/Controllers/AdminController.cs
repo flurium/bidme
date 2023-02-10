@@ -8,7 +8,6 @@ using Web.Models;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = Role.Admin)]
     public class AdminController : Controller
     {
         public static string Name => "admin";
@@ -24,6 +23,7 @@ namespace Web.Controllers
             _banService = banService;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var roleExists = await _roleManager.RoleExistsAsync(Role.Admin);
@@ -50,6 +50,7 @@ namespace Web.Controllers
             return res.Succeeded ? RedirectToAction(nameof(Index)) : View("Error");
         }
 
+        [Authorize(Roles = Role.Admin)]
         public async Task<IActionResult> Users(UserViewModel filter)
         {
             var users = await _banService.FilterUsers(new UserFilter
@@ -78,6 +79,7 @@ namespace Web.Controllers
             return View(userViewModels);
         }
 
+        [Authorize(Roles = Role.Admin)]
         public async Task<IActionResult> MakeAdmin(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -85,6 +87,7 @@ namespace Web.Controllers
             return RedirectToAction(nameof(Users));
         }
 
+        [Authorize(Roles = Role.Admin)]
         public async Task<IActionResult> UnmakeAdmin(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -92,24 +95,28 @@ namespace Web.Controllers
             return RedirectToAction(nameof(Users));
         }
 
+        [Authorize(Roles = Role.Admin)]
         public async Task<IActionResult> UnbanBuyer(string id, string redirect)
         {
             await _banService.UnbanBuyer(id);
             return Redirect(redirect);
         }
 
+        [Authorize(Roles = Role.Admin)]
         public async Task<IActionResult> BanBuyer(string id, string redirect)
         {
             await _banService.BanBuyer(id);
             return Redirect(redirect);
         }
 
+        [Authorize(Roles = Role.Admin)]
         public async Task<IActionResult> UnbanSeller(string id, string redirect)
         {
             await _banService.UnbanSeller(id);
             return Redirect(redirect);
         }
 
+        [Authorize(Roles = Role.Admin)]
         public async Task<IActionResult> BanSeller(string id, string redirect)
         {
             await _banService.BanSeller(id);

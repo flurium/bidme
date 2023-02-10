@@ -72,8 +72,5 @@ namespace Dal.Repository
         {
             return await Entities.Include(l => l.Images).Include(l => l.Orders).FirstOrDefaultAsync(p => p.Id == id);
         }
-
-        
-
     }
 }

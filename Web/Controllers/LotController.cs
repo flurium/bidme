@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Security.Claims;
 using Web.Helpers;
 using Web.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Web.Controllers
 {
@@ -17,12 +18,14 @@ namespace Web.Controllers
         private readonly LotService _lotService;
         private readonly CategoryService _categoryService;
         private readonly IWebHostEnvironment _host;
+        private readonly FavoriteService _favoriteService;
 
-        public LotController(LotService productService, CategoryService categoryService, IWebHostEnvironment webHost)
+        public LotController(LotService productService, CategoryService categoryService, IWebHostEnvironment webHost, FavoriteService favoriteService)
         {
             _lotService = productService;
             _categoryService = categoryService;
             _host = webHost;
+            _favoriteService = favoriteService;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -42,11 +45,22 @@ namespace Web.Controllers
         {
             var categoryList = categories.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
 
+            var lots = await _lotService.FilterLots(new LotFilter(name, categoryList, min, max));
+            List<CatalogLotViewModel> lotViewModels = new(lots.Count);
+
+            var uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            foreach (var lot in lots)
+            {
+                var isFavorite = await _favoriteService.IsExist(new Favorite(uid, lot.Id));
+                lotViewModels.Add(new(lot, isFavorite));
+            }
+
             var catalogViewModel = new CatalogViewModel
             {
-                Lots = await _lotService.FilterLots(new LotFilter(name, categoryList, min, max)),
+                Lots = lotViewModels,
                 Categories = await _lotService.GetCategories(categoryList),
-                SelectedCategories = categoryList
+                SelectedCategories = categoryList,
+                Route = $"{Request.Path}{Request.QueryString}"
             };
 
             return View(catalogViewModel);
@@ -74,7 +88,9 @@ namespace Web.Controllers
                 lastOrder != null ? lastOrder.OrderPrice : res.Price,
                 res.CloseTime,
                 res.IsClosed,
-                res.Description
+                res.Description,
+               $"{Request.Path}{Request.QueryString}",
+               isFavorite: await _favoriteService.IsExist(new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
             );
 
             return View(details);

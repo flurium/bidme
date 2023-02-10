@@ -24,7 +24,11 @@ namespace Dal.Repository
 
         public async Task Edit(Order order)
         {
-            Entities.Update(order);
+            var entity = Entities.FirstOrDefault(o => o.LotId == order.LotId && o.UserId == order.UserId);
+            if (entity == null) return;
+
+            entity.OrderPrice = order.OrderPrice;
+            Entities.Update(entity);
             await _db.SaveChangesAsync();
         }
 
@@ -32,13 +36,9 @@ namespace Dal.Repository
 
         public async Task<Order?> MaxPrice(int lotid)
         {
-            var order = await Entities.Where(x => x.LotId == lotid).OrderByDescending(n => n).ToListAsync();
-            if (order.Count == 0)
-            {
-                return null;
-            }
+            var order = await Entities.Where(x => x.LotId == lotid).OrderByDescending(n => n).FirstOrDefaultAsync();
 
-            return order.First();
+            return order;
         }
     }
 }

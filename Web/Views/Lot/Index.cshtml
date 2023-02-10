@@ -75,7 +75,10 @@
             <a class="btn btn-sm btn-outline-primary" asp-controller="@LotController.Name"
               asp-action="@nameof(LotController.Details)" asp-route-id="@lot.Id"
             >Details</a>
-            <a class="btn btn-sm btn-outline-secondary">Add to favorites</a>
+                <a class="btn btn-sm btn-outline-primary" asp-controller="@FavoriteController.Name"
+              asp-action="@nameof(FavoriteController.AddFavorite)" asp-route-id="@lot.Id"
+            >Add to favorites</a>
+           
           </div>
         </div>
       </div>

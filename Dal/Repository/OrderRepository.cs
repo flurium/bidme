@@ -19,7 +19,7 @@ namespace Dal.Repository
             await _db.SaveChangesAsync();
         }
 
-        public virtual async Task<IReadOnlyCollection<Order>> FindIncludeProductsAsync(Expression<Func<Order, bool>> conditon)
+        public  async Task<IReadOnlyCollection<Order>> FindIncludeProductsAsync(Expression<Func<Order, bool>> conditon)
             => await Entities.Include(o => o.Lot).Where(conditon).ToListAsync().ConfigureAwait(false);
 
         public async Task Edit(Order order)
@@ -40,5 +40,7 @@ namespace Dal.Repository
 
             return order.First();
         }
+
+       
     }
 }

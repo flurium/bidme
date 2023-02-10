@@ -29,6 +29,8 @@ namespace Bll.Infrastructure
             services.AddScoped<LotService>();
             services.AddScoped<CategoryService>();
             services.AddScoped<OrderService>();
+            services.AddScoped<FavoriteService>();
+            services.AddScoped<BanService>();
         }
     }
 }

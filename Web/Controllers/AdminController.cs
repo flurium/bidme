@@ -24,7 +24,6 @@ namespace Web.Controllers
             _banService = banService;
         }
 
-        [Authorize(Roles = "")]
         public async Task<IActionResult> Index()
         {
             var roleExists = await _roleManager.RoleExistsAsync(Role.Admin);

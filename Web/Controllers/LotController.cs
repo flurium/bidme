@@ -82,16 +82,16 @@ namespace Web.Controllers
 
         [HttpGet]
         [Authorize]
-        [NotBannedAs(Roles = Role.BannedAsSeller)]
+        [NotBannedAs(Role.BannedAsSeller)]
         public async Task<IActionResult> Create()
         {
-            // ViewBag.Categories = await _categoryService.List();
+            ViewBag.Categories = await _categoryService.List();
             return View();
         }
 
         [HttpPost]
         [Authorize]
-        [NotBannedAs(Roles = Role.BannedAsSeller)]
+        [NotBannedAs(Role.BannedAsSeller)]
         public async Task<IActionResult> Create(LotViewModel lotView)
         {
             var time = DateTime.Now;
@@ -133,7 +133,7 @@ namespace Web.Controllers
         }
 
         [Authorize]
-        [NotBannedAs(Roles = Role.BannedAsBuyer)]
+        [NotBannedAs(Role.BannedAsBuyer)]
         public async Task<IActionResult> MakeBid(double amount, int id)
         {
             bool res = await _lotService.MakeBid(amount, id, User.FindFirstValue(ClaimTypes.NameIdentifier));

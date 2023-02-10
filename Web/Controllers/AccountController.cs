@@ -132,11 +132,10 @@ namespace Web.Controllers
 
             if (res.Succeeded)
             {
-                return RedirectToAction(nameof(UserController.UserLots), UserController.Name);
+                return RedirectToAction(nameof(UserController.Lots), UserController.Name);
             }
             return View("Error");
         }
-
 
         [HttpGet]
         public IActionResult ForgotPassword()
@@ -148,7 +147,6 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
         {
-
             var user = await _userManager.FindByEmailAsync(forgotPasswordViewModel.Email);
             if (user == null)
                 return RedirectToAction(nameof(ForgotPasswordConfirmation));
@@ -175,7 +173,6 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
         {
-
             var user = await _userManager.FindByEmailAsync(resetPasswordViewModel.Email);
             if (user == null)
                 RedirectToAction(nameof(ResetPasswordConfirmation));

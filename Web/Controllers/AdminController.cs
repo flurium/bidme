@@ -15,12 +15,14 @@ namespace Web.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
         private readonly BanService _banService;
+        private readonly SignInManager<User> _signInManager;
 
-        public AdminController(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, BanService banService)
+        public AdminController(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, BanService banService, SignInManager<User> signInManager)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _banService = banService;
+            _signInManager = signInManager;
         }
 
         [Authorize]
@@ -47,7 +49,13 @@ namespace Web.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var res = await _userManager.AddToRoleAsync(user, Role.Admin);
 
-            return res.Succeeded ? RedirectToAction(nameof(Index)) : View("Error");
+            if (res.Succeeded)
+            {
+                await _signInManager.RefreshSignInAsync(user);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View("Error");
         }
 
         [Authorize(Roles = Role.Admin)]
@@ -83,7 +91,8 @@ namespace Web.Controllers
         public async Task<IActionResult> MakeAdmin(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            await _userManager.AddToRoleAsync(user, Role.Admin);
+            var res = await _userManager.AddToRoleAsync(user, Role.Admin);
+            if (res.Succeeded) await _signInManager.RefreshSignInAsync(user);
             return RedirectToAction(nameof(Users));
         }
 
@@ -91,7 +100,8 @@ namespace Web.Controllers
         public async Task<IActionResult> UnmakeAdmin(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            await _userManager.RemoveFromRoleAsync(user, Role.Admin);
+            var res = await _userManager.RemoveFromRoleAsync(user, Role.Admin);
+            if (res.Succeeded) await _signInManager.RefreshSignInAsync(user);
             return RedirectToAction(nameof(Users));
         }
 

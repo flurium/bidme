@@ -12,12 +12,14 @@ namespace Bll.Services
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
+        private readonly SignInManager<User> _signInManager;
 
-        public BanService(UserManager<User> userManager, IEmailSender emailSender, RoleManager<IdentityRole> roleManager)
+        public BanService(UserManager<User> userManager, IEmailSender emailSender, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _signInManager = signInManager;
         }
 
         public async Task<IEnumerable<User>> FilterUsers(UserFilter filter)
@@ -44,6 +46,7 @@ namespace Bll.Services
             var res = await _userManager.RemoveFromRoleAsync(user, Role.BannedAsBuyer);
             if (res.Succeeded)
             {
+                await _signInManager.RefreshSignInAsync(user);
                 await _emailSender.SendEmailAsync(user.Email, "Unbanned in BidMe", "You were unbanned in BidMe!");
             }
         }
@@ -56,6 +59,7 @@ namespace Bll.Services
             var res = await _userManager.AddToRoleAsync(user, Role.BannedAsBuyer);
             if (res.Succeeded)
             {
+                await _signInManager.RefreshSignInAsync(user);
                 await _emailSender.SendEmailAsync(user.Email, "Banned in BidMe",
                     "YOU ARE BANNED IN BIDME! You did bad actions. Reply to this email with apologies to get unbanned!");
             }
@@ -67,6 +71,7 @@ namespace Bll.Services
             var res = await _userManager.RemoveFromRoleAsync(user, Role.BannedAsSeller);
             if (res.Succeeded)
             {
+                await _signInManager.RefreshSignInAsync(user);
                 await _emailSender.SendEmailAsync(user.Email, "Unbanned in BidMe", "You were unbanned in BidMe! Now u may sell");
             }
         }
@@ -79,6 +84,7 @@ namespace Bll.Services
             var res = await _userManager.AddToRoleAsync(user, Role.BannedAsSeller);
             if (res.Succeeded)
             {
+                await _signInManager.RefreshSignInAsync(user);
                 await _emailSender.SendEmailAsync(user.Email, "Banned in BidMe",
                     "YOU ARE BANNED IN BIDME! You did bad actions. Reply to this email with apologies to get unbanned and sell again");
             }

@@ -109,13 +109,14 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Logout()
+        public async Task<IActionResult> LogoutAsync()
         {
-            _signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(LotController.Index), LotController.Name);
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult ChangeName()
         {
             return View();
@@ -132,8 +133,10 @@ namespace Web.Controllers
 
             if (res.Succeeded)
             {
+                await _signInManager.RefreshSignInAsync(user);
                 return RedirectToAction(nameof(UserController.Lots), UserController.Name);
             }
+
             return View("Error");
         }
 
@@ -148,8 +151,7 @@ namespace Web.Controllers
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
         {
             var user = await _userManager.FindByEmailAsync(forgotPasswordViewModel.Email);
-            if (user == null)
-                return RedirectToAction(nameof(ForgotPasswordConfirmation));
+            if (user == null) return RedirectToAction(nameof(ForgotPasswordConfirmation));
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var callback = Url.Action(nameof(ResetPassword), "Account", new { token, email = user.Email }, Request.Scheme);
 
@@ -174,8 +176,7 @@ namespace Web.Controllers
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
         {
             var user = await _userManager.FindByEmailAsync(resetPasswordViewModel.Email);
-            if (user == null)
-                RedirectToAction(nameof(ResetPasswordConfirmation));
+            if (user == null) return RedirectToAction(nameof(ResetPasswordConfirmation));
             var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPasswordViewModel.Token, resetPasswordViewModel.Password);
             if (!resetPassResult.Succeeded)
             {

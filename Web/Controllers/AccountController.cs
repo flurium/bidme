@@ -131,7 +131,11 @@ namespace Web.Controllers
             user.UserName = nameNew;
             var res = await _userManager.UpdateAsync(user);
 
-            if (res.Succeeded) return RedirectToAction(nameof(UserController.Lots), UserController.Name);
+            if (res.Succeeded)
+            {
+                await _signInManager.RefreshSignInAsync(user);
+                return RedirectToAction(nameof(UserController.Lots), UserController.Name);
+            }
 
             return View("Error");
         }

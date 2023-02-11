@@ -80,7 +80,7 @@ namespace Bll.Services
 
       if (order == null || order.OrderPrice < amount)
       {
-        var userOrder = (await unitOfWork.OrderRepository.FindByConditionAsync(x => x.UserId == userId)).FirstOrDefault();
+        var userOrder = (await unitOfWork.OrderRepository.FindByConditionAsync(x => (x.UserId == userId)&&(x.LotId==lotId))).FirstOrDefault();
         if (userOrder != null)
         {
           userOrder.OrderPrice = amount;

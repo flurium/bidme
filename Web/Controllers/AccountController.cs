@@ -109,7 +109,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> LogoutAsync()
+        public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(LotController.Index), LotController.Name);

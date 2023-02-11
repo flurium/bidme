@@ -52,7 +52,7 @@ namespace Bll.Services
 
     public async Task<IReadOnlyCollection<Lot>> FilterLots(LotFilter filter)
     {
-      List<Expression<Func<Lot, bool>>> conditions = new();
+      List<Expression<Func<Lot, bool>>> conditions = new() { l => l.IsClosed == false };
 
       if (filter.Name != null)
         conditions.Add(l => l.Name.ToLower().Contains(filter.Name.ToLower()));

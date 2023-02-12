@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Security.Claims;
 using Web.Helpers;
 using Web.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Web.Controllers
 {

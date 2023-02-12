@@ -154,12 +154,17 @@ namespace Web.Controllers
         [NotBannedAs(Role.BannedAsBuyer)]
         public async Task<IActionResult> MakeBid(double amount, int id)
         {
-            bool res = await _lotService.MakeBid(amount, id, User.FindFirstValue(ClaimTypes.NameIdentifier));
-            if (res == false)
+            var lot = await _lotService.GetDetails(id);
+            if (lot.IsClosed == false)
             {
-                ViewBag.Error = "The bid must be greater than the price";
+                bool res = await _lotService.MakeBid(amount, id, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                if (res == false)
+                {
+                    ViewBag.Error = "The bid must be greater than the price";
+                }
+                ViewBag.Error = "";
+                return RedirectToAction(nameof(Details), new { id });
             }
-            ViewBag.Error = "";
             return RedirectToAction(nameof(Details), new { id });
         }
 

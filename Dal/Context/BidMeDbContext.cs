@@ -43,6 +43,7 @@ namespace Dal.Context
             builder.Entity<LotImage>().HasOne(li => li.Lot).WithMany(l => l.Images).HasForeignKey(l => l.LotId);
 
             builder.Entity<Category>().HasKey(c => c.Id);
+            builder.Entity<Category>().HasOne(c => c.Parent).WithMany(c => c.Subcategories).HasForeignKey(c => c.ParentId);
         }
     }
 }

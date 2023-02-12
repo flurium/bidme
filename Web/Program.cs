@@ -56,7 +56,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.Requi
 
 // Logs
 var logger = new LoggerConfiguration()
-    .WriteTo.File("./logs.json", rollingInterval: RollingInterval.Day)
+    .WriteTo.Console()
     .MinimumLevel.Fatal()
     .CreateLogger();
 

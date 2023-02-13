@@ -2,16 +2,16 @@
 {
     public class LotFilter
     {
-        public LotFilter(string? name, List<string> categories, double? minPrice, double? maxPrice)
+        public LotFilter(string? name, int? categoryId, double? minPrice, double? maxPrice)
         {
             Name = name;
-            Categories = categories;
+            CategoryId = categoryId;
             MinPrice = minPrice;
             MaxPrice = maxPrice;
         }
 
         public string? Name { get; set; }
-        public List<string> Categories { get; set; }
+        public int? CategoryId { get; set; }
         public double? MinPrice { get; set; } = null;
         public double? MaxPrice { get; set; } = null;
     }

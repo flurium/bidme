@@ -31,7 +31,7 @@ namespace Bll.Services
             try
             {
                 name = name.Trim();
-                var sameName = await _unitOfWork.CategoryRepository.FindByConditionAsync(c => c.Name.ToLower() == name.ToLower());
+                var sameName = await _unitOfWork.CategoryRepository.FindMany(c => c.Name.ToLower() == name.ToLower());
                 if (sameName != null && sameName.Count != 0) return false;
                 await _unitOfWork.CategoryRepository.Update(id, name);
                 return true;

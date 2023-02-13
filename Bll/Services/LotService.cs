@@ -40,7 +40,7 @@ namespace Bll.Services
 
         public async Task<IReadOnlyCollection<Lot>> FindByConditionAsync(Expression<Func<Lot, bool>> conditon)
         {
-            return await unitOfWork.LotRepository.FindByConditionAsync(conditon);
+            return await unitOfWork.LotRepository.FindMany(conditon);
         }
 
         public async Task<Lot?> GetOne(int id) => await unitOfWork.LotRepository.GetByIdWithImages(id);
@@ -57,16 +57,56 @@ namespace Bll.Services
             if (filter.Name != null)
                 conditions.Add(l => l.Name.ToLower().Contains(filter.Name.ToLower()));
 
-            if (filter.Categories.Count > 0)
-                conditions.Add(l => filter.Categories.Contains(l.Category.Name));
-
             if (filter.MinPrice != null)
                 conditions.Add(l => l.Price >= filter.MinPrice);
 
             if (filter.MaxPrice != null)
                 conditions.Add(l => l.Price <= filter.MaxPrice);
 
+            // root = all lots
+            if (filter.CategoryId == null) return await unitOfWork.LotRepository.FindByConditions(conditions);
+
+            // if in category
+            var currentCategory = await unitOfWork.CategoryRepository.FindOne(c => c.Id == filter.CategoryId);
+            if (currentCategory == null) return await unitOfWork.LotRepository.FindByConditions(conditions);
+
+            var subcategories = new List<int>() { currentCategory.Id };
+            for (int i = 0; i < subcategories.Count; ++i)
+            {
+                var fullSubcategories = await unitOfWork.CategoryRepository.FindMany(c => c.ParentId == subcategories[i]);
+                subcategories.AddRange(fullSubcategories.Select(c => c.Id));
+            }
+
+            conditions.Add(l => subcategories.Contains(l.CategoryId));
+
             return await unitOfWork.LotRepository.FindByConditions(conditions);
+        }
+
+        /// <summary>
+        /// Fill all parents of given category
+        /// </summary>
+        /// <returns>Null if category isn't found, category if found</returns>
+        public async Task<Category?> GetCategoryWithParents(string name)
+        {
+            var category = await unitOfWork.CategoryRepository.FindOne(c => c.Name.ToLower() == name.ToLower());
+            if (category == null) return null;
+
+            // get parents
+            var current = category;
+            while (current.ParentId != null)
+            {
+                var parent = await unitOfWork.CategoryRepository.FindOne(c => c.Id == current.ParentId);
+                if (parent == null) break;
+                current.Parent = parent;
+                current = parent;
+            }
+
+            return category;
+        }
+
+        public async Task<IReadOnlyCollection<Category>> GetSubcategories(int? id)
+        {
+            return await unitOfWork.CategoryRepository.FindMany(c => c.ParentId == id);
         }
 
         public async Task<IReadOnlyCollection<Category>> GetCategories(List<string> current)
@@ -80,7 +120,7 @@ namespace Bll.Services
 
             if (order == null || order.OrderPrice < amount)
             {
-                var userOrder = (await unitOfWork.OrderRepository.FindByConditionAsync(x => (x.UserId == userId) && (x.LotId == lotId))).FirstOrDefault();
+                var userOrder = (await unitOfWork.OrderRepository.FindMany(x => (x.UserId == userId) && (x.LotId == lotId))).FirstOrDefault();
                 if (userOrder != null)
                 {
                     userOrder.OrderPrice = amount;

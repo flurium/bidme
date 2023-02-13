@@ -18,7 +18,7 @@ namespace Bll.Services
 
         public async Task DeleteAll(int id)
         {
-            var images = await _unitOfWork.LotImageRepository.FindByConditionAsync(x => x.LotId == id);
+            var images = await _unitOfWork.LotImageRepository.FindMany(x => x.LotId == id);
             foreach (var image in images)
             {
                 string fullPath = root + image.Path;

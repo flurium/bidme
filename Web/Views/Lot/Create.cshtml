@@ -1,54 +1,78 @@
-﻿
-@using Domain.Models
+﻿@using Domain.Models
 @using Web.Controllers
 @using static Domain.Models.Term
-
-@model LotViewModel
+@model CreateLotViewModel
 
 <form asp-action="@nameof(LotController.Create)" method="post" enctype="multipart/form-data">
+   <!-- Categories -->
+      <div class="mt-5 mb-4">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            @if (Model.Category == null)
+            {
+              <li class="breadcrumb-item active">All</li>
+            }
+            else
+            {
+
+          <li class="breadcrumb-item"><a asp-route-category="@null">All</a></li>
+
+              var currentParent = Model.Category.Parent;
+              @while (currentParent != null)
+              {
+                <li class="breadcrumb-item">
+                  <a asp-route-category="@currentParent.Name">@currentParent.Name</a>
+                </li>
+                currentParent = currentParent.Parent;
+              }
+              <li class="breadcrumb-item active" aria-current="page">@Model.Category.Name</li>
+            }
+          </ol>
+        </nav>
+
+        <div class="d-flex gap-3 flex-wrap">
+          @foreach (var category in Model.Subcategories)
+          {
+          <a asp-route-category="@category.Name">@category.Name</a>
+          }
+        </div>
+      </div>
+
 
   <div class="row row-cols-md-2 mb-3">
     <div class="form-group">
-      <label asp-for="Name" class="form-label">Name:</label>
-      <input asp-for="Name" class="form-control" />
-      <span asp-validation-for="Name" class="text-danger"></span>
+      <label for="Name" class="form-label">Name:</label>
+      <input name="Name" class="form-control"  />
     </div>
     <div class="form-group">
-      <label asp-for="Price" class="form-label">Price:</label>
-      <input asp-for="Price" type="number" min="1" class="form-control" />
-      <span asp-validation-for="Price" class="text-danger"></span>
+      <label for="Price" class="form-label">Price:</label>
+      <input name="Price" type="number" min="1" class="form-control" />
     </div>
   </div>
 
   <div class="form-group mb-3">
-    <label asp-for="Description" class="form-label">Discription:</label>
-    <textarea asp-for="Description" class="form-control"></textarea>
-    <span asp-validation-for="Description" class="text-danger"></span>
+    <label for="Description" class="form-label">Discription:</label>
+    <textarea name="Description" class="form-control"> </textarea>
   </div>
 
-  <div class="row row-cols-md-2 mb-3">
     <div class="form-group">
-      <label asp-for="CategoryId" class="form-label">Category:</label>
-      <select required class="form-select" name="CategoryId">
-        @foreach (var category in ViewBag.Categories)
-        {
-          <option value="@category.Id">@category.Name</option>
-        }
-      </select>
-    </div>
-    <div class="form-group">
-      <label asp-for="CloseTime" class="form-label">Close Time:</label>
+      <label for="CloseTime" class="form-label">Close Time:</label>
       <select required class="form-select" name="CloseTime">
         @foreach (var value in Enum.GetValues(typeof(VALUE)))
         {
           <option value="@value">@Enum.GetName(typeof(VALUE), value) day(s)</option>
         }                  
       </select>
-    </div>    
-  </div>
+    </div>
+    <div class="form-group">
+
+    <input hidden value="@Model.Category?.Id" name="CategoryId" />
+    
+
+    </div>  
 
   <div class="form-group mb-3">
-    <label asp-for="Url" class="form-label">Images:</label>
+    <label for="Url" class="form-label">Images:</label>
     <input type="file" class="form-control" name="Url" multiple/>
   </div>
             

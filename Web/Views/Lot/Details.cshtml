@@ -46,23 +46,33 @@
   }
 
   <div class="col">
-    <h1>@Model.Name</h1>
-    <small class=" pb-3">Will be closed on: @Model.CloseTime.ToString()</small>
+        <h1>@Model.Name</h1>
+        @if (@Model.IsClosed)
+        {
+              <small class=" pb-3">Lot was closed at: @Model.CloseTime.ToString()</small>
+             <div class="row row-cols-2 mb-3">
+             <p class="fw-bold">Sold with price: @Model.CurrentPrice $</p>
+          <p class="">Start price: @Model.StartPrice $</p>
+        </div>    
+  
+        }
+        else
+        {
+           <small class=" pb-3">Will be closed on: @Model.CloseTime.ToString()</small>
+            <div class="row row-cols-2 mb-3">
+              <p class="fw-bold">Current price: @Model.CurrentPrice $</p>
+              <p class="">Start price: @Model.StartPrice $</p>
+            </div>  
 
-    <div class="row row-cols-2 mb-3">
-      <p class="fw-bold">Current price: @Model.CurrentPrice $</p>
-      <p class="">Start price: @Model.StartPrice $</p>
-    </div>
-
-
-    
-    <form asp-action="@nameof(LotController.MakeBid)" asp-controller="@LotController.Name" method="post">
-      <input type="hidden" value="@Model.Id" name="id" />
-      <div class="input-group">
-        <input type="number" class="form-control" name="amount" aria-label="Amount" aria-describedby="btn-make-bid" min="@Model.CurrentPrice" value="@(Model.CurrentPrice+1)" />
-        <input type="submit" class="btn btn-primary" value="Make a bid" id="btn-make-bid" />
-      </div>
-    </form>
+         <form asp-action="@nameof(LotController.MakeBid)" asp-controller="@LotController.Name" method="post">
+          <input type="hidden" value="@Model.Id" name="id" />
+          <div class="input-group">
+            <input type="number" class="form-control" name="amount" aria-label="Amount" aria-describedby="btn-make-bid" min="@Model.CurrentPrice" value="@(Model.CurrentPrice+1)" />
+            <input type="submit" class="btn btn-primary" value="Make a bid" id="btn-make-bid" />
+          </div>
+        </form>
+        }
+  
 
     @if(Model.IsFavorite)
     {
@@ -78,5 +88,32 @@
     <h3 class="mt-3">Description:</h3>
     <p>@Model.Description</p>
   </div>
-  
+  <div>
+      <h4 class="text-left my-4 pb-2">Bids:</h4>
+<div>
+    <ul class="list-group list-group-flush">
+        @foreach (var order in @Model.Orders)
+            {
+                <li class="list-group-item">
+                    @if (order.User!= null)
+                    {
+                        <p class="card-header">@order.User.UserName</p>
+                    }
+                    else
+                    {
+                        <p>User</p>
+                    }
+                <div>
+                        <p class="card-text">@order.OrderPrice $</p>
+                </div>
+            </li>
+            }
+      </ul>
+         
+
 </div>
+
+  </div>
+</div>
+
+

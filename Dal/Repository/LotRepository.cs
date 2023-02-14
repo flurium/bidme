@@ -70,7 +70,7 @@ namespace Dal.Repository
 
         public async Task<Lot?> GetByIdWithImagesOrders(int id)
         {
-            return await Entities.Include(l => l.Images).Include(l => l.Orders).FirstOrDefaultAsync(p => p.Id == id);
+            return await Entities.Include(l => l.Images).Include(l => l.Orders).ThenInclude(o=>o.User).FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }

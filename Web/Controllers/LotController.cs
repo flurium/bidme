@@ -89,6 +89,7 @@ namespace Web.Controllers
                 res.Images.Select(i => i.Path).ToArray(),
                 res.Price,
                 lastOrder != null ? lastOrder.OrderPrice : res.Price,
+                res.MinimalBid,
                 res.CloseTime,
                 res.IsClosed,
                 res.Description,
@@ -140,6 +141,7 @@ namespace Web.Controllers
             {
                 Name = lotView.Name,
                 Price = lotView.Price,
+                MinimalBid = lotView.MinimalBid,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 CloseTime = time,
                 Description = lotView.Description,

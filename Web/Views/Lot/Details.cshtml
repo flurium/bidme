@@ -59,8 +59,9 @@
         {
             <form asp-action="@nameof(LotController.MakeBid)" asp-controller="@LotController.Name" method="post">
                 <input type="hidden" value="@Model.Id" name="id" />
-                <div class="input-group">
-                    <input type="number" class="form-control" name="amount" aria-label="Amount" aria-describedby="btn-make-bid" min="@Model.CurrentPrice" value="@(Model.CurrentPrice+1)" />
+                <div><span id="150" class="badge rounded-pill bg-primary percent">150</span><span id="200" class="badge rounded-pill bg-primary percent">200</span></div>
+                <div class="input-group">                  
+                    <input type="number" id="bid" class="form-control" name="amount" aria-label="Amount" aria-describedby="btn-make-bid" min="@Model.CurrentPrice" value="@(Model.CurrentPrice+Model.MinimalBid)" />
                     <input type="submit" class="btn btn-primary" value="Make a bid" id="btn-make-bid" />
                 </div>
             </form>
@@ -82,3 +83,22 @@
   </div>
   
 </div>
+
+@section Scripts{
+<script asp-append-version="true">
+    $(function () {
+
+        $("#150").click(function () {
+            setPercent(Number($("#150").html()));
+        });
+        $("#200").click(function () {
+            setPercent(Number($("#200").html()));
+        });
+    });
+
+    function setPercent(percent) {
+        var price = Number($("#bid").attr('min'));
+        $("#bid").val(price * percent/100);
+    }
+</script>
+}

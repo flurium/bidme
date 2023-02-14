@@ -6,6 +6,7 @@ namespace Web.Models
     {
         public string Name { get; set; }
         public double Price { get; set; }
+        public int MinimalBid { get; set; }
         public string Description { get; set; }
 
         public string CloseTime { get; set; }

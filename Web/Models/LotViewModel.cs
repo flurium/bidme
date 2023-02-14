@@ -1,18 +1,16 @@
-﻿using Domain.Models;
-
-namespace Web.Models
+﻿namespace Web.Models
 {
-  public class LotViewModel
-  {
-    public string Name { get; set; }
-    public double Price { get; set; }
-    public string Description { get; set; }
+    public class LotViewModel
+    {
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public string Description { get; set; }
 
-    public string CloseTime { get; set; }
+        public string CloseTime { get; set; }
 
-    public int? Category { get; set; }
-    public string? NewCategory { get; set; }
+        public int? Category { get; set; }
+        public string? NewCategory { get; set; }
 
-    public IFormFileCollection Url { get; set; }
-  }
+        public IFormFileCollection Url { get; set; }
+    }
 }

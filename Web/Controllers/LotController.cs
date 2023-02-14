@@ -94,7 +94,7 @@ namespace Web.Controllers
                 res.IsClosed,
                 res.Description,
                $"{Request.Path}{Request.QueryString}",
-               isFavorite: await _favoriteService.IsExist(new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
+               await _favoriteService.IsExist(new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
             );
 
             return View(details);

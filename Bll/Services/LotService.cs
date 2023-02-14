@@ -47,6 +47,7 @@ namespace Bll.Services
                 Description = lot.Description,
                 Price = lot.Price,
                 CategoryId = categoryId,
+                MinimalBid = lot.MinimalBid,
                 CloseTime = lot.CloseTime,
                 IsClosed = false,
                 UserId = lot.UserId,

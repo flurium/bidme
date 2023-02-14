@@ -55,14 +55,16 @@
     </div>
 
 
-    
-    <form asp-action="@nameof(LotController.MakeBid)" asp-controller="@LotController.Name" method="post">
-      <input type="hidden" value="@Model.Id" name="id" />
-      <div class="input-group">
-        <input type="number" class="form-control" name="amount" aria-label="Amount" aria-describedby="btn-make-bid" min="@Model.CurrentPrice" value="@(Model.CurrentPrice+1)" />
-        <input type="submit" class="btn btn-primary" value="Make a bid" id="btn-make-bid" />
-      </div>
-    </form>
+        @if (Model.IsClosed == false)
+        {
+            <form asp-action="@nameof(LotController.MakeBid)" asp-controller="@LotController.Name" method="post">
+                <input type="hidden" value="@Model.Id" name="id" />
+                <div class="input-group">
+                    <input type="number" class="form-control" name="amount" aria-label="Amount" aria-describedby="btn-make-bid" min="@Model.CurrentPrice" value="@(Model.CurrentPrice+1)" />
+                    <input type="submit" class="btn btn-primary" value="Make a bid" id="btn-make-bid" />
+                </div>
+            </form>
+        }
 
     @if(Model.IsFavorite)
     {

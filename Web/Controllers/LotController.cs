@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Security.Claims;
 using Web.Helpers;
 using Web.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Web.Controllers
 {
@@ -38,14 +37,15 @@ namespace Web.Controllers
         /// Main page of filter and serch for lots
         /// </summary>
         /// <param name="name">Search name of lot</param>
-        /// <param name="categories">Comma seperated categories names</param>
+        /// <param name="category">One category name</param>
         /// <param name="min">Minimal price</param>
         /// <param name="max">Maximum price</param>
-        public async Task<IActionResult> Index(string? name, double? min, double? max, string? categories)
+        public async Task<IActionResult> Index(string? name, double? min, double? max, string? category)
         {
-            var categoryList = categories != null ? categories.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList() : new();
+            Category? categoryWithParents = category != null ? await _lotService.GetCategoryWithParents(category) : null;
 
-            var filter = new LotFilter(name, categoryList, min, max);
+            var subcategories = await _lotService.GetSubcategories(categoryWithParents?.Id);
+            var filter = new LotFilter(name, categoryWithParents?.Id, min, max);
 
             var lots = await _lotService.FilterLots(filter);
             List<CatalogLotViewModel> lotViewModels = new(lots.Count);
@@ -59,9 +59,9 @@ namespace Web.Controllers
 
             var catalogViewModel = new CatalogViewModel
             {
+                Category = categoryWithParents,
                 Lots = lotViewModels,
-                Categories = await _lotService.GetCategories(categoryList),
-                SelectedCategories = categoryList,
+                Subcategories = subcategories,
                 Route = $"{Request.Path}{Request.QueryString}",
                 Filter = filter
             };
@@ -102,10 +102,13 @@ namespace Web.Controllers
         [HttpGet]
         [Authorize]
         [NotBannedAs(Role.BannedAsSeller)]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(string? category)
         {
-            ViewBag.Categories = await _categoryService.List();
-            return View();
+            Category? categoryWithParents = category != null ? await _lotService.GetCategoryWithParents(category) : null;
+            var subcategories = await _lotService.GetSubcategories(categoryWithParents?.Id);
+
+            CreateLotViewModel viewModel = new(categoryWithParents, subcategories);
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -155,12 +158,17 @@ namespace Web.Controllers
         [NotBannedAs(Role.BannedAsBuyer)]
         public async Task<IActionResult> MakeBid(double amount, int id)
         {
-            bool res = await _lotService.MakeBid(amount, id, User.FindFirstValue(ClaimTypes.NameIdentifier));
-            if (res == false)
+            var lot = await _lotService.GetDetails(id);
+            if (lot.IsClosed == false)
             {
-                ViewBag.Error = "The bid must be greater than the price";
+                bool res = await _lotService.MakeBid(amount, id, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                if (res == false)
+                {
+                    ViewBag.Error = "The bid must be greater than the price";
+                }
+                ViewBag.Error = "";
+                return RedirectToAction(nameof(Details), new { id });
             }
-            ViewBag.Error = "";
             return RedirectToAction(nameof(Details), new { id });
         }
 

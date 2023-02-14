@@ -6,9 +6,11 @@ namespace Dal.Repository.Interfaces
     {
         Task<IReadOnlyCollection<TEntity>> GetAllAsync();
 
-        Task<IReadOnlyCollection<TEntity>> FindByConditionAsync(Expression<Func<TEntity, bool>> conditon);
+        Task<IReadOnlyCollection<TEntity>> FindMany(Expression<Func<TEntity, bool>> conditon);
 
-        Task<IReadOnlyCollection<TEntity>> FindByConditions(List<Expression<Func<TEntity, bool>>> conditons);
+        Task<TEntity?> FindOne(Expression<Func<TEntity, bool>> conditon);
+
+        Task<IReadOnlyCollection<TEntity>> FindMany(List<Expression<Func<TEntity, bool>>> conditons);
 
         Task<IReadOnlyCollection<TEntity>> OrderDescending(Expression<Func<TEntity, bool>> conditon);
 

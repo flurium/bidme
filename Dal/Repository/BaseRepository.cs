@@ -51,10 +51,10 @@ namespace Dal.Repository
         }
 
         // Get
-        public virtual async Task<IReadOnlyCollection<TEntity>> FindByConditionAsync(Expression<Func<TEntity, bool>> conditon)
+        public virtual async Task<IReadOnlyCollection<TEntity>> FindMany(Expression<Func<TEntity, bool>> conditon)
             => await Entities.Where(conditon).ToListAsync().ConfigureAwait(false);
 
-        public virtual async Task<IReadOnlyCollection<TEntity>> FindByConditions(List<Expression<Func<TEntity, bool>>> conditons)
+        public virtual async Task<IReadOnlyCollection<TEntity>> FindMany(List<Expression<Func<TEntity, bool>>> conditons)
         {
             IQueryable<TEntity> entities = Entities;
             foreach (var conditon in conditons)
@@ -64,8 +64,11 @@ namespace Dal.Repository
             return await entities.ToListAsync().ConfigureAwait(false);
         }
 
+        public async Task<TEntity?> FindOne(Expression<Func<TEntity, bool>> conditon)
+            => await Entities.FirstOrDefaultAsync(conditon);
+
         public virtual async Task<IReadOnlyCollection<TEntity>> GetAllAsync()
-                => await Entities.ToListAsync().ConfigureAwait(false);
+            => await Entities.ToListAsync().ConfigureAwait(false);
 
         public async Task<IReadOnlyCollection<TEntity>> OrderDescending(Expression<Func<TEntity, bool>> condition)
         {

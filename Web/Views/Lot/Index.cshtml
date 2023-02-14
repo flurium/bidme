@@ -7,7 +7,7 @@
 
 <!-- Search and filter form -->
 <form class="mb-3 mt-4" asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)" method="get">
-  <input hidden value="@string.Join(',', Model.SelectedCategories)" name="categories" />
+  <input hidden value="@Model.Category?.Name" name="category" />
   <div class="input-group">
     <input class="form-control" placeholder="Enter name of lot you want to search" aria-label="Search" name="name" aria-describedby="btn-search" value="@Model.Filter.Name">
     <button class="btn btn-primary" type="submit" id="btn-search">Search</button>
@@ -20,29 +20,47 @@
   </div>
 </form>
 
-<!-- Categories -->
-<div class="d-flex mt-3 mb-5" style="overflow:hidden;" id="categories-list">
-  <button onclick="toggleCategories()" class="btn btn-dark btn-sm dropdown-toggle"></button>
-  @foreach(var category in Model.Categories)
-  {
-    @if(Model.SelectedCategories.Contains(category.Name)) {
+<!-- Categories --> 
+<div class="my-4">
+ 
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      @if(Model.Category == null)
+      {
+        <li class="breadcrumb-item active">All</li>
+      } else
+      {
 
-    <a class="btn btn-primary btn-sm"
-     asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)"
-      asp-route-categories="@string.Join(',', Model.SelectedCategories.Where(c => c != category.Name))"
-     asp-route-max="@Model.Filter.MaxPrice" asp-route-min="@Model.Filter.MinPrice" asp-route-name="@Model.Filter.Name">
-      @category.Name
-    </a>
-    } else {
-      <a class="btn btn-light btn-sm"
-     asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)"
-     asp-route-categories="@string.Join(',', Model.SelectedCategories.Append(category.Name))"
-     asp-route-max="@Model.Filter.MaxPrice" asp-route-min="@Model.Filter.MinPrice" asp-route-name="@Model.Filter.Name">
-      @category.Name
-    </a>
+        <li class="breadcrumb-item">
+          <a asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)"
+           asp-route-max="@Model.Filter.MaxPrice" asp-route-min="@Model.Filter.MinPrice" asp-route-name="@Model.Filter.Name">All </a>
+        </li>
+
+        var currentParent = Model.Category.Parent;
+        @while (currentParent != null)
+        {
+          <li class="breadcrumb-item">
+            <a asp-route-category="@currentParent.Name" asp-route-max="@Model.Filter.MaxPrice" asp-route-min="@Model.Filter.MinPrice" 
+              asp-route-name="@Model.Filter.Name">@currentParent.Name</a>
+          </li>
+          currentParent = currentParent.Parent;
+        }
+        <li class="breadcrumb-item active" aria-current="page">@Model.Category.Name</li>
+      }
+
+
+    </ol>
+  </nav>
+
+  <div class="d-flex mb-5 gap-3 flex-wrap">
+    @foreach (var category in Model.Subcategories)
+    {
+        <a asp-route-category="@category.Name" asp-route-max="@Model.Filter.MaxPrice" 
+          asp-route-min="@Model.Filter.MinPrice" asp-route-name="@Model.Filter.Name">@category.Name</a>
     }
-  }
+  </div>
 </div>
+
 
 
 <!-- List of lots -->
@@ -60,7 +78,19 @@
           }
           <div class="mb-3">
             <h5 class="mb-3">@lot.Name</h5>
-            <p class="fs-5 fw-bold my-1">@lot.Price $</p>
+            <p class="fs-5 my-1">
+              Current price: 
+              @{
+                var lates = lot.Orders.FirstOrDefault();
+                if (lates == null)
+                {
+                  <span class="fw-bold">@lot.Price $</span>
+                }else
+                {
+                  <span class="fw-bold">@lates.OrderPrice $</span>
+                }
+              }
+            </p>
           </div>
           <div class="d-flex gap-3 align-items-center">
             @if (User.Identity != null && User.Identity.IsAuthenticated == true)
@@ -88,20 +118,3 @@
     </div>
   }
 </div>
-
-
-
-@section Scripts {
-
-  <!-- Toggle of categories selection -->
-  <script>
-    function toggleCategories() {
-        var categoriesList = document.getElementById("categories-list")
-        if(categoriesList.classList.contains("flex-wrap")) {
-            categoriesList.classList.remove("flex-wrap")
-        } else {
-            categoriesList.classList.add("flex-wrap")
-        }
-    }
-  </script>
-}

@@ -116,6 +116,9 @@ namespace Web.Controllers
         [NotBannedAs(Role.BannedAsSeller)]
         public async Task<IActionResult> Create(LotViewModel lotView)
         {
+            var category = lotView.CategoryId;
+            if (category == null) return RedirectToAction(nameof(Create));
+
             var time = DateTime.Now;
 
             switch (lotView.CloseTime)
@@ -140,8 +143,8 @@ namespace Web.Controllers
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 CloseTime = time,
                 Description = lotView.Description,
-                CategoryId = lotView.CategoryId
             };
+            lot.CategoryId = (int)category;
             var res = await _lotService.Create(lot, lotView.Url);
 
             return RedirectToAction(nameof(LotController.Index));

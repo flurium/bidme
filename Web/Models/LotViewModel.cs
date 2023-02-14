@@ -10,7 +10,7 @@ namespace Web.Models
 
         public string CloseTime { get; set; }
 
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
 
         public IFormFileCollection Url { get; set; }
     }

@@ -64,11 +64,11 @@ namespace Bll.Services
                 conditions.Add(l => l.Price <= filter.MaxPrice);
 
             // root = all lots
-            if (filter.CategoryId == null) return await unitOfWork.LotRepository.FindByConditions(conditions);
+            if (filter.CategoryId == null) return await unitOfWork.LotRepository.FindManyWithOrders(conditions);
 
             // if in category
             var currentCategory = await unitOfWork.CategoryRepository.FindOne(c => c.Id == filter.CategoryId);
-            if (currentCategory == null) return await unitOfWork.LotRepository.FindByConditions(conditions);
+            if (currentCategory == null) return await unitOfWork.LotRepository.FindManyWithOrders(conditions);
 
             var subcategories = new List<int>() { currentCategory.Id };
             for (int i = 0; i < subcategories.Count; ++i)
@@ -79,7 +79,12 @@ namespace Bll.Services
 
             conditions.Add(l => subcategories.Contains(l.CategoryId));
 
-            return await unitOfWork.LotRepository.FindByConditions(conditions);
+            return await unitOfWork.LotRepository.FindManyWithOrders(conditions);
+        }
+
+        public async Task<IReadOnlyCollection<Lot>> UserSellLots(string uid)
+        {
+            return await unitOfWork.LotRepository.FindManyWithOrders(new() { l => l.UserId == uid });
         }
 
         /// <summary>

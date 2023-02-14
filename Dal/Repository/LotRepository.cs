@@ -2,6 +2,7 @@
 using Dal.Repository.Interfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Dal.Repository
@@ -11,8 +12,6 @@ namespace Dal.Repository
         public LotRepository(BidMeDbContext context) : base(context)
         {
         }
-
-        public async Task<Lot?> FirstOrDefault(Expression<Func<Lot, bool>> conditon) => await Entities.FirstOrDefaultAsync(conditon);
 
         public virtual async Task DeleteOne(int id) => await base.DeleteOne(l => l.Id == id);
 
@@ -42,7 +41,7 @@ namespace Dal.Repository
             return await Entities.Include(l => l.Images).FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public override async Task<IReadOnlyCollection<Lot>> FindByConditions(List<Expression<Func<Lot, bool>>> conditons)
+        public override async Task<IReadOnlyCollection<Lot>> FindMany(List<Expression<Func<Lot, bool>>> conditons)
         {
             IQueryable<Lot> entities = Entities;
             foreach (var conditon in conditons)
@@ -71,6 +70,16 @@ namespace Dal.Repository
         public async Task<Lot?> GetByIdWithImagesOrders(int id)
         {
             return await Entities.Include(l => l.Images).Include(l => l.Orders).FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<IReadOnlyCollection<Lot>> FindManyWithOrders(List<Expression<Func<Lot, bool>>> conditons)
+        {
+            IQueryable<Lot> entities = Entities;
+            foreach (var conditon in conditons)
+            {
+                entities = entities.Where(conditon);
+            }
+            return await entities.Include(l => l.Orders).ToListAsync().ConfigureAwait(false);
         }
     }
 }

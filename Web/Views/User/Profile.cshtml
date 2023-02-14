@@ -19,7 +19,19 @@
           }
           <div class="mb-3">
             <h5 class="mb-3">@lot.Name</h5>
-            <p class="fs-5 fw-bold my-1">@lot.Price $</p>
+            <p class="fs-5 my-1">
+              Current price: 
+              @{
+                var lates = lot.Orders.FirstOrDefault();
+                if (lates == null)
+                {
+                  <span class="fw-bold">@lot.Price $</span>
+                }else
+                {
+                  <span class="fw-bold">@lates.OrderPrice $</span>
+                }
+              }
+            </p>
           </div>
           <div class="d-flex gap-3 align-items-center pb-2 mb-1">
             <a class="btn btn-sm btn-outline-primary" asp-controller="@LotController.Name"

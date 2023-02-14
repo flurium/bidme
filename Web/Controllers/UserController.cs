@@ -24,7 +24,7 @@ namespace Web.Controllers
         {
             ViewBag.Page = "I sell:";
             ViewBag.Route = $"{Request.Path}{Request.QueryString}";
-            var res = await _lotService.FindByConditionAsync(x => x.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var res = await _lotService.UserSellLots(User.FindFirstValue(ClaimTypes.NameIdentifier));
             return View("Profile", res);
         }
 

@@ -5,8 +5,6 @@ namespace Dal.Repository.Interfaces
 {
     public interface ILotRepository : IRepository<Lot>
     {
-        Task<Lot?> FirstOrDefault(Expression<Func<Lot, bool>> conditon);
-
         Task DeleteOne(int id);
 
         Task Edit(Lot product);
@@ -20,5 +18,7 @@ namespace Dal.Repository.Interfaces
         Task<Lot?> GetByIdWithImagesOrders(int id);
 
         Task<IReadOnlyCollection<Lot>> FindMany<TKey>(Expression<Func<Lot, bool>> find, Expression<Func<Lot, TKey>> order, bool orderDescending);
+
+        Task<IReadOnlyCollection<Lot>> FindManyWithOrders(List<Expression<Func<Lot, bool>>> conditons);
     }
 }

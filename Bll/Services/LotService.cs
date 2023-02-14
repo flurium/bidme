@@ -20,10 +20,37 @@ namespace Bll.Services
             this.lotImageService = lotImageService;
         }
 
-        public async Task<Lot?> Create(Lot lot, IFormFileCollection? files)
+        public async Task<Lot?> Create(CreateLotInput lot, IFormFileCollection? files)
         {
             lot.CloseTime = lot.CloseTime.ToUniversalTime();
-            var res = await unitOfWork.LotRepository.CreateReturn(lot);
+
+            int categoryId;
+
+            if (lot.NewCategoryName != null && lot.NewCategoryName.Trim() != string.Empty)
+            {
+                var trimedNewName = lot.NewCategoryName.Trim();
+                var category = await unitOfWork.CategoryRepository.FindOne(c => c.Name.ToLower() == trimedNewName.ToLower() && c.ParentId == lot.CategoryId);
+                category ??= await unitOfWork.CategoryRepository.CreateReturn(new() { Name = trimedNewName, ParentId = lot.CategoryId });
+
+                if (category == null) return null;
+                categoryId = category.Id;
+            }
+            else
+            {
+                if (lot.CategoryId == null) return null;
+                categoryId = lot.CategoryId.Value;
+            }
+
+            var res = await unitOfWork.LotRepository.CreateReturn(new Lot
+            {
+                Name = lot.Name,
+                Description = lot.Description,
+                Price = lot.Price,
+                CategoryId = categoryId,
+                CloseTime = lot.CloseTime,
+                IsClosed = false,
+                UserId = lot.UserId,
+            });
             if (res == null) return null;
 
             lotCloser.AddToWaitingOrder(new WaitingLot(res.Id, res.CloseTime));

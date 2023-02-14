@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Dal\Dal.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\NewFolder\" />
+  </ItemGroup>
+
 </Project>

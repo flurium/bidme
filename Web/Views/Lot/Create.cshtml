@@ -6,6 +6,7 @@
 <form asp-action="@nameof(LotController.Create)" method="post" enctype="multipart/form-data">
    <!-- Categories -->
       <div class="mt-5 mb-4">
+
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             @if (Model.Category == null)
@@ -14,7 +15,6 @@
             }
             else
             {
-
           <li class="breadcrumb-item"><a asp-route-category="@null">All</a></li>
 
               var currentParent = Model.Category.Parent;
@@ -36,7 +36,11 @@
           <a asp-route-category="@category.Name">@category.Name</a>
           }
         </div>
-      </div>
+
+    <input hidden value="@Model.Category?.Id" name="category" />
+    <input class="form-control mt-3" name="NewCategory" placeholder="New category name, if current categories are not suitable for you" />
+   
+  </div>
 
 
   <div class="row row-cols-md-2 mb-3">
@@ -68,12 +72,9 @@
         }                  
       </select>
     </div>
-    <div class="form-group">
 
-    <input hidden value="@Model.Category?.Id" name="CategoryId" />
     
 
-    </div>  
 
   <div class="form-group mb-3">
     <label for="Url" class="form-label">Images:</label>

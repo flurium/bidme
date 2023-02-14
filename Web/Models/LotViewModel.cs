@@ -1,6 +1,4 @@
-﻿using Domain.Models;
-
-namespace Web.Models
+﻿namespace Web.Models
 {
     public class LotViewModel
     {
@@ -11,7 +9,8 @@ namespace Web.Models
 
         public string CloseTime { get; set; }
 
-        public int? CategoryId { get; set; }
+        public int? Category { get; set; }
+        public string? NewCategory { get; set; }
 
         public IFormFileCollection Url { get; set; }
     }

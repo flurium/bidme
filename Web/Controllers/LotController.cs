@@ -117,7 +117,7 @@ namespace Web.Controllers
         [NotBannedAs(Role.BannedAsSeller)]
         public async Task<IActionResult> Create(LotViewModel lotView)
         {
-            var category = lotView.CategoryId;
+            var category = lotView.Category;
             if (category == null) return RedirectToAction(nameof(Create));
 
             var time = DateTime.Now;
@@ -137,7 +137,7 @@ namespace Web.Controllers
                     break;
             }
 
-            Lot lot = new()
+            var res = await _lotService.Create(new()
             {
                 Name = lotView.Name,
                 Price = lotView.Price,
@@ -145,9 +145,9 @@ namespace Web.Controllers
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 CloseTime = time,
                 Description = lotView.Description,
-            };
-            lot.CategoryId = (int)category;
-            var res = await _lotService.Create(lot, lotView.Url);
+                CategoryId = lotView.Category,
+                NewCategoryName = lotView.NewCategory
+            }, lotView.Url);
 
             return RedirectToAction(nameof(LotController.Index));
         }

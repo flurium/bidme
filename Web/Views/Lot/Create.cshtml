@@ -15,7 +15,7 @@
             }
             else
             {
-          <li class="breadcrumb-item"><a asp-route-category="@null">All</a></li>
+            <li class="breadcrumb-item"><a asp-route-category="@null">All</a></li>
 
               var currentParent = Model.Category.Parent;
               @while (currentParent != null)
@@ -30,15 +30,31 @@
           </ol>
         </nav>
 
-        <div class="d-flex gap-3 flex-wrap">
-          @foreach (var category in Model.Subcategories)
-          {
-          <a asp-route-category="@category.Name">@category.Name</a>
-          }
-        </div>
+        @if (Model.Subcategories.Count > 0)
+        {
+          <div class="mb-5 gap-3 flex-wrap d-none d-md-flex">
+            @foreach (var category in Model.Subcategories)
+            {
+              <a asp-route-category="@category.Name">@category.Name</a>
+            }
+          </div>
+          <div class="dropdown d-md-none">
+            <button class="btn btn-outline-primary w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Subcategories
+            </button>
+            <ul class="dropdown-menu">
+              @foreach (var category in Model.Subcategories)
+              {
+                <li>
+                  <a asp-route-category="@category.Name" class="dropdown-item">@category.Name</a>
+                </li>
+              }
+            </ul>
+          </div>
+        }
 
     <input hidden value="@Model.Category?.Id" name="category" />
-    <input class="form-control mt-3" name="NewCategory" placeholder="New category name, if current categories are not suitable for you" />
+    <input class="form-control mt-3" name="NewCategory" placeholder="New category name, if current category are not suitable for you" />
    
   </div>
 

@@ -52,13 +52,30 @@
     </ol>
   </nav>
 
-  <div class="d-flex mb-5 gap-3 flex-wrap">
-    @foreach (var category in Model.Subcategories)
-    {
+  @if (Model.Subcategories.Count > 0)
+  {
+    <div class="mb-5 gap-3 flex-wrap d-none d-md-flex">
+      @foreach (var category in Model.Subcategories)
+      {
         <a asp-route-category="@category.Name" asp-route-max="@Model.Filter.MaxPrice" 
           asp-route-min="@Model.Filter.MinPrice" asp-route-name="@Model.Filter.Name">@category.Name</a>
-    }
-  </div>
+      }
+    </div>
+    <div class="dropdown d-md-none">
+      <button class="btn btn-outline-primary w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Subcategories
+      </button>
+      <ul class="dropdown-menu">
+        @foreach (var category in Model.Subcategories)
+        {
+          <li>
+            <a asp-route-category="@category.Name" asp-route-max="@Model.Filter.MaxPrice" class="dropdown-item"
+              asp-route-min="@Model.Filter.MinPrice" asp-route-name="@Model.Filter.Name">@category.Name</a>
+          </li>
+        }
+      </ul>
+    </div>
+  }
 </div>
 
 

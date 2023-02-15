@@ -84,16 +84,18 @@ namespace Web.Controllers
             var lastOrder = res.Orders.FirstOrDefault();
 
             var details = new LotDetailsViewModel(
-                res.Id,
-                res.Name,
-                res.Images.Select(i => i.Path).ToArray(),
-                res.Price,
-                lastOrder != null ? lastOrder.OrderPrice : res.Price,
-                res.CloseTime,
-                res.IsClosed,
-                res.Description,
-               $"{Request.Path}{Request.QueryString}",
-               isFavorite: await _favoriteService.IsExist(new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
+                id: res.Id,
+                name: res.Name,
+                images: res.Images.Select(i => i.Path).ToArray(),
+                startPrice: res.Price,
+                currentPrice: lastOrder != null ? lastOrder.OrderPrice : res.Price,
+                minimalBid: res.MinimalBid,
+                closeTime: res.CloseTime,
+                isClosed: res.IsClosed,
+                description: res.Description,
+                route: $"{Request.Path}{Request.QueryString}",
+                isFavorite: await _favoriteService.IsExist(new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), id)),
+                orders: res.Orders
             );
 
             return View(details);
@@ -116,6 +118,9 @@ namespace Web.Controllers
         [NotBannedAs(Role.BannedAsSeller)]
         public async Task<IActionResult> Create(LotViewModel lotView)
         {
+            var category = lotView.Category;
+            if (category == null) return RedirectToAction(nameof(Create));
+
             var time = DateTime.Now;
 
             switch (lotView.CloseTime)
@@ -133,16 +138,17 @@ namespace Web.Controllers
                     break;
             }
 
-            Lot lot = new()
+            var res = await _lotService.Create(new()
             {
                 Name = lotView.Name,
                 Price = lotView.Price,
+                MinimalBid = lotView.MinimalBid,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 CloseTime = time,
                 Description = lotView.Description,
-                CategoryId = lotView.CategoryId
-            };
-            var res = await _lotService.Create(lot, lotView.Url);
+                CategoryId = lotView.Category,
+                NewCategoryName = lotView.NewCategory
+            }, lotView.Url);
 
             return RedirectToAction(nameof(LotController.Index));
         }

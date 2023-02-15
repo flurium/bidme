@@ -2,7 +2,6 @@
 using Dal.Repository.Interfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace Dal.Repository
@@ -69,7 +68,7 @@ namespace Dal.Repository
 
         public async Task<Lot?> GetByIdWithImagesOrders(int id)
         {
-            return await Entities.Include(l => l.Images).Include(l => l.Orders).FirstOrDefaultAsync(p => p.Id == id);
+            return await Entities.Include(l => l.Images).Include(l => l.Orders).ThenInclude(o=>o.User).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<IReadOnlyCollection<Lot>> FindManyWithOrders(List<Expression<Func<Lot, bool>>> conditons)

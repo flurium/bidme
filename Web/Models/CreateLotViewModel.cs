@@ -1,5 +1,4 @@
 ﻿using Domain.Models;
-using NuGet.Protocol;
 
 namespace Web.Models
 {

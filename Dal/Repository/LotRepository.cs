@@ -68,7 +68,7 @@ namespace Dal.Repository
 
         public async Task<Lot?> GetByIdWithImagesOrders(int id)
         {
-            return await Entities.Include(l => l.Images).Include(l => l.Orders).ThenInclude(o=>o.User).FirstOrDefaultAsync(p => p.Id == id);
+            return await Entities.Include(l => l.Images).Include(l => l.Orders.OrderByDescending(o => o.OrderPrice)).ThenInclude(o => o.User).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<IReadOnlyCollection<Lot>> FindManyWithOrders(List<Expression<Func<Lot, bool>>> conditons)
@@ -78,7 +78,7 @@ namespace Dal.Repository
             {
                 entities = entities.Where(conditon);
             }
-            return await entities.Include(l => l.Orders).ToListAsync().ConfigureAwait(false);
+            return await entities.Include(l => l.Orders.OrderByDescending(o => o.OrderPrice)).ToListAsync().ConfigureAwait(false);
         }
     }
 }

@@ -58,32 +58,28 @@
         }
         else
         {
-           <small class=" pb-3">Will be closed on: @Model.CloseTime.ToString()</small>
-            <div class="row row-cols-2 mb-3">
+           <small>Will be closed on: @Model.CloseTime.ToString()</small>
+            <div class="row row-cols-2 mt-3">
               <p class="fw-bold">Current price: @Model.CurrentPrice $</p>
               <p class="">Start price: @Model.StartPrice $</p>
             </div>  
 
 
-        @if (Model.IsClosed == false)
-        {
-            <form asp-action="@nameof(LotController.MakeBid)" asp-controller="@LotController.Name" method="post">
-                <input type="hidden" value="@Model.Id" name="id" />
-                <div><span id="150" class="badge rounded-pill bg-primary percent">150</span><span id="200" class="badge rounded-pill bg-primary percent">200</span></div>
-                <div class="input-group">                  
-                    <input type="number" id="bid" class="form-control" name="amount" aria-label="Amount" aria-describedby="btn-make-bid" min="@Model.CurrentPrice" value="@(Model.CurrentPrice+Model.MinimalBid)" />
-                    <input type="submit" class="btn btn-primary" value="Make a bid" id="btn-make-bid" />
-                </div>
-            </form>
-        }
-
-          <form asp-action="@nameof(LotController.MakeBid)" asp-controller="@LotController.Name" method="post">
-            <input type="hidden" value="@Model.Id" name="id" />
-            <div class="input-group">
-              <input type="number" class="form-control" name="amount" aria-label="Amount" aria-describedby="btn-make-bid" min="@Model.CurrentPrice" value="@(Model.CurrentPrice+1)" />
-              <input type="submit" class="btn btn-primary" value="Make a bid" id="btn-make-bid" />
-            </div>
-          </form>
+          @if (Model.IsClosed == false)
+          {
+              <form asp-action="@nameof(LotController.MakeBid)" asp-controller="@LotController.Name" method="post">
+                  <input type="hidden" value="@Model.Id" name="id" />
+                  <div class="mb-2">
+                    <button id="150" class="badge rounded-pill bg-primary percent">150 %</button>
+                    <button id="200" class="badge rounded-pill bg-primary percent">200 %</button>
+                    <button id="400" class="badge rounded-pill bg-primary percent">400 %</button>
+                  </div>
+                  <div class="input-group mb-2">                  
+                      <input type="number" id="bid" class="form-control" name="amount" aria-label="Amount" aria-describedby="btn-make-bid" min="@Model.CurrentPrice" value="@(Model.CurrentPrice+Model.MinimalBid)" />
+                      <input type="submit" class="btn btn-primary" value="Make a bid" id="btn-make-bid" />
+                  </div>
+              </form>
+          }
         }
   
 
@@ -122,11 +118,17 @@
 <script asp-append-version="true">
     $(function () {
 
-        $("#150").click(function () {
-            setPercent(Number($("#150").html()));
+        $("#150").click(function (e) {
+            e.preventDefault()
+            setPercent(150)
         });
-        $("#200").click(function () {
-            setPercent(Number($("#200").html()));
+        $("#200").click(function (e) {
+            e.preventDefault()
+            setPercent(200);
+        });
+        $("#400").click(function (e) {
+            e.preventDefault()
+            setPercent(400);
         });
     });
 

@@ -5,8 +5,7 @@ namespace Web.Models
     public class LotDetailsViewModel
     {
         public LotDetailsViewModel(int id, string name, IReadOnlyCollection<string> images,
-            double startPrice, double currentPrice, DateTime closeTime, bool isClosed, string description, string route, bool isFavorite, IReadOnlyCollection<Order> orders)
-            double startPrice, double currentPrice, int minimalBid, DateTime closeTime, bool isClosed, string description, string route, bool isFavorite)
+            double startPrice, double currentPrice, int minimalBid, DateTime closeTime, bool isClosed, string description, string route, bool isFavorite, IReadOnlyCollection<Order> orders)
         {
             Id = id;
             Name = name;

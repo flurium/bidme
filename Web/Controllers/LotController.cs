@@ -84,19 +84,18 @@ namespace Web.Controllers
             var lastOrder = res.Orders.FirstOrDefault();
 
             var details = new LotDetailsViewModel(
-                res.Id,
-                res.Name,
-                res.Images.Select(i => i.Path).ToArray(),
-                res.Price,
-                lastOrder != null ? lastOrder.OrderPrice : res.Price,
-                res.MinimalBid,
-                res.CloseTime,
-                res.IsClosed,
-                res.Description,
-               $"{Request.Path}{Request.QueryString}",
-               await _favoriteService.IsExist(new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
-               isFavorite: await _favoriteService.IsExist(new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), id)),
-               res.Orders
+                id: res.Id,
+                name: res.Name,
+                images: res.Images.Select(i => i.Path).ToArray(),
+                startPrice: res.Price,
+                currentPrice: lastOrder != null ? lastOrder.OrderPrice : res.Price,
+                minimalBid: res.MinimalBid,
+                closeTime: res.CloseTime,
+                isClosed: res.IsClosed,
+                description: res.Description,
+                route: $"{Request.Path}{Request.QueryString}",
+                isFavorite: await _favoriteService.IsExist(new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), id)),
+                orders: res.Orders
             );
 
             return View(details);

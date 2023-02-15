@@ -95,6 +95,8 @@ namespace Web.Controllers
                 res.Description,
                $"{Request.Path}{Request.QueryString}",
                await _favoriteService.IsExist(new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
+               isFavorite: await _favoriteService.IsExist(new Favorite(User.FindFirstValue(ClaimTypes.NameIdentifier), id)),
+               res.Orders
             );
 
             return View(details);

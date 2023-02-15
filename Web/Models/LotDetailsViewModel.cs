@@ -1,8 +1,11 @@
-﻿namespace Web.Models
+﻿using Domain.Models;
+
+namespace Web.Models
 {
     public class LotDetailsViewModel
     {
         public LotDetailsViewModel(int id, string name, IReadOnlyCollection<string> images,
+            double startPrice, double currentPrice, DateTime closeTime, bool isClosed, string description, string route, bool isFavorite, IReadOnlyCollection<Order> orders)
             double startPrice, double currentPrice, int minimalBid, DateTime closeTime, bool isClosed, string description, string route, bool isFavorite)
         {
             Id = id;
@@ -16,6 +19,7 @@
             Description = description;
             Route = route;
             IsFavorite = isFavorite;
+            Orders = orders;
         }
 
         public int Id { get; set; }
@@ -32,5 +36,6 @@
 
         public string Route { get; set; }
         public bool IsFavorite { get; set; }
+        public IReadOnlyCollection<Order> Orders { get; set; }
     }
 }

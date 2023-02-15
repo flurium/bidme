@@ -71,14 +71,14 @@ namespace Dal.Repository
             return await Entities.Include(l => l.Images).Include(l => l.Orders.OrderByDescending(o => o.OrderPrice)).ThenInclude(o => o.User).FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<IReadOnlyCollection<Lot>> FindManyWithOrders(List<Expression<Func<Lot, bool>>> conditons)
+        public async Task<IReadOnlyCollection<Lot>> FindManyWithOrdersImages(List<Expression<Func<Lot, bool>>> conditons)
         {
             IQueryable<Lot> entities = Entities;
             foreach (var conditon in conditons)
             {
                 entities = entities.Where(conditon);
             }
-            return await entities.Include(l => l.Orders.OrderByDescending(o => o.OrderPrice)).ToListAsync().ConfigureAwait(false);
+            return await entities.Include(l => l.Orders.OrderByDescending(o => o.OrderPrice)).Include(l => l.Images).ToListAsync().ConfigureAwait(false);
         }
     }
 }

@@ -19,6 +19,6 @@ namespace Dal.Repository.Interfaces
 
         Task<IReadOnlyCollection<Lot>> FindMany<TKey>(Expression<Func<Lot, bool>> find, Expression<Func<Lot, TKey>> order, bool orderDescending);
 
-        Task<IReadOnlyCollection<Lot>> FindManyWithOrders(List<Expression<Func<Lot, bool>>> conditons);
+        Task<IReadOnlyCollection<Lot>> FindManyWithOrdersImages(List<Expression<Func<Lot, bool>>> conditons);
     }
 }

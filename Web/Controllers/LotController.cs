@@ -179,15 +179,15 @@ namespace Web.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> EditDescription(string description, int lotId)
+        public async Task<IActionResult> EditDescription(int id, string description)
         {
-            var lot = await _lotService.GetOne(lotId);
+            var lot = await _lotService.GetOne(id);
             if (lot != null && lot.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
-                await _lotService.Edit(description, lotId);
+                await _lotService.Edit(description, id);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(UserController.Lots), UserController.Name);
         }
     }
 }

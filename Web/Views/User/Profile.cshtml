@@ -39,6 +39,10 @@
             >Details</a>
             <a class="btn btn-sm btn-outline-danger" asp-controller="@LotController.Name" asp-route-redirect="@ViewBag.Route"
              asp-action="@nameof(LotController.Delete)" asp-route-id="@lot.Id">Delete</a>
+            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                data-bs-target="#editModal" data-bs-id="@lot.Id" data-bs-name="@lot.Description">
+                Edit
+            </button>
           </div>
         </div>
       </div>
@@ -46,3 +50,4 @@
   }
 </div>
 
+@await Html.PartialAsync("_EditModal")

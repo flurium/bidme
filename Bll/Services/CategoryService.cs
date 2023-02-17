@@ -41,12 +41,19 @@ namespace Bll.Services
 
         public async Task<bool> Delete(int id)
         {
-            try
+            var category = await _unitOfWork.CategoryRepository.GetById(id);
+            if (category.Lots.Count == 0)
             {
+               try
+               {
                 await _unitOfWork.CategoryRepository.DeleteOne(id);
                 return true;
-            }
+               }
             catch (Exception) { return false; }
+            }
+
+            return false;
+          
         }
 
         /*

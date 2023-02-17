@@ -20,6 +20,6 @@ namespace Dal.Repository
             await _db.SaveChangesAsync();
         }
 
-        public async Task<Category?> GetById(int id) => await Entities.FirstOrDefaultAsync(c => c.Id == id);
+        public async Task<Category?> GetById(int id) => await Entities.Include(c=>c.Lots).FirstOrDefaultAsync(c => c.Id == id);
     }
 }

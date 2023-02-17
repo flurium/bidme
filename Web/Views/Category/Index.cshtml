@@ -1,0 +1,45 @@
+﻿@using Web.Controllers;
+@using Domain.Models;
+@model IEnumerable<Category>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<h1 class="mb-5 mt-4 text-center">Manage categories</h1>
+
+<form asp-action="@nameof(CategoryController.Create)" class="row my-4">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col">
+        <input id="Name" name="Name" class="form-control" placeholder="Name" />
+    </div>
+    <div class="col-auto">
+        <input type="submit" value="Create" class="btn btn-success" />
+    </div>
+</form>
+
+
+<ul class="list-group list-group-flush">
+    @foreach (var item in Model)
+    {
+            <li class="px-0 list-group-item d-flex justify-content-between align-items-center">
+            @Html.DisplayFor(modelItem => item.Name)
+                <button type="button" class="btn btn-sm btn-dark" data-bs-toggle="modal"
+                data-bs-target="#editModal" data-bs-id="@item.Id" data-bs-name="@item.Name">
+                    Edit
+                </button>
+                         <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
+                data-bs-target="#addSubCategory" data-bs-id="@item.Id">
+                            Add SubCategory
+                        </button>
+                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                data-bs-target="#deleteConfirm" data-bs-id="@item.Id" data-bs-name="@item.Name">
+                    Delete
+                </button>
+            </li>
+    }
+</ul>
+
+@await Html.PartialAsync("_DeleteModal")
+@await Html.PartialAsync("_EditModal")
+@await Html.PartialAsync("_SubCategoryModal")

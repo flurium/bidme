@@ -1,0 +1,33 @@
+﻿@using Web.Controllers;
+<!-- Modal for edit category -->
+<div class="modal fade" id="addSubCategory" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <form asp-action="@nameof(CategoryController.CreateSubCategory)" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="id" name="ParentId"/>
+                <input type="text" class="form-control" id="name" name="Name" placeholder="Name"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Back</button>
+                <input type="submit" value="Confirm" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var addSubCategory = document.getElementById('addSubCategory')
+    addSubCategory.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+
+        var id = button.getAttribute('data-bs-id')
+
+        var idInput = addSubCategory.querySelector('#id')
+        idInput.value = id
+
+    })
+</script>

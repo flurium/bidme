@@ -1,0 +1,38 @@
+﻿@using Web.Controllers;
+<!-- Modal for delete confirmation -->
+<div class="modal fade" id="deleteConfirm" tabindex="-1" aria-labelledby="deleteConfirm" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm deleting</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete category?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">No</button>
+                <form asp-action="@nameof(CategoryController.Delete)">
+                    <input type="hidden" id="category-id" name="id" />
+                    <input type="submit" value="Yes" class="btn btn-danger" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var modal = document.getElementById('deleteConfirm')
+    modal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+
+        var id = button.getAttribute('data-bs-id')
+        var name = button.getAttribute('data-bs-name')
+
+        var modalBody = modal.querySelector('.modal-body')
+        modalBody.textContent = `Are you sure you want to delete category: ${name}?`
+
+        var categoryInput = modal.querySelector('#category-id')
+        categoryInput.value = id
+    })
+</script>

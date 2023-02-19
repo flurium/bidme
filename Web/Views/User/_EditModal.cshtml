@@ -1,0 +1,36 @@
+﻿@using Web.Controllers;
+<!-- Modal for edit category -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <form asp-controller="@LotController.Name" asp-action="@nameof(LotController.EditDescription)" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit description</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="id" name="id" />
+                <textarea class="form-control" id="description" name="description"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Back</button>
+                <input type="submit" value="Confirm" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var editModal = document.getElementById('editModal')
+    editModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+
+        var id = button.getAttribute('data-bs-id')
+        var description = button.getAttribute('data-bs-name')
+
+        var idInput = editModal.querySelector('#id')
+        idInput.value = id
+
+        var descriptionInput = editModal.querySelector('#description')
+        descriptionInput.innerText = description
+    })
+</script>

@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\NewFolder\**" />
+    <EmbeddedResource Remove="Services\NewFolder\**" />
+    <None Remove="Services\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Services\LotService.cs~RF3a789fc.TMP" />
   </ItemGroup>
 
@@ -18,10 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Dal\Dal.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\NewFolder\" />
   </ItemGroup>
 
 </Project>

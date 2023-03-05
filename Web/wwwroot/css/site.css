@@ -27,8 +27,6 @@ body {
     background-color: #1a1a1a;
     right: 20px;
     bottom: 0px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;

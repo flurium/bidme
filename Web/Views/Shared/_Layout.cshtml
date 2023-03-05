@@ -12,7 +12,7 @@
     @await Html.PartialAsync("_Favicons")
 </head>
 <body>
-    <header>
+    <header class="sticky-top">
         <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
             <div class="container">
         <a class="navbar-brand" asp-controller="@LotController.Name" asp-action="@nameof(LotController.Index)">BidMe</a>
@@ -72,10 +72,10 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody()
+            @RenderBody()         
         </main>
-    </div>
-
+        <div class="btn-up btn-up_hide"></div>
+    </div>  
     @*<footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2023 - Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
@@ -84,6 +84,32 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        const btnUp = {
+            el: document.querySelector('.btn-up'),
+            show() {
+                this.el.classList.remove('btn-up_hide');
+            },
+            hide() {
+                this.el.classList.add('btn-up_hide');
+            },
+            addEventListener() {
+                window.addEventListener('scroll', () => {
+                    const scrollY = window.scrollY || document.documentElement.scrollTop;
+                    scrollY > 200 ? this.show() : this.hide();
+                });
+
+                document.querySelector('.btn-up').onclick = () => {
+                    window.scrollTo({
+                        top: 0,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        }
+        btnUp.addEventListener();
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

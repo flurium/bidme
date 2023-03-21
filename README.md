@@ -2,6 +2,8 @@
 
 ## Auction platform: BidMe
 
+Date: Feb 2, 2023 - Mar 6, 2023
+
 GitHub repo: [flurium/bidme](https://github.com/flurium/bidme)
 
 Website: [bidme.onrender.com](https://bidme.onrender.com)

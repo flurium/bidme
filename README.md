@@ -1,10 +1,20 @@
-# bidme
-
 <img src="./assets/look.png" align="right" height="320px" style="margin-left: 10px;"/>
 
-Auction platform
+## Auction platform: BidMe
 
-## Rules
+GitHub repo: [flurium/bidme](https://github.com/flurium/bidme)
 
-- For controllers create static property `Name` only get, which will return controller name in lowercase.
-  In views use this property for links, etc. You can find example in HomeController
+Website: [bidme.onrender.com](https://bidme.onrender.com)
+
+### Technologies:
+- ASP.NET Core MVC
+- PostgreSQL
+- Bootstrap (with custom theme)
+- Entity Framework Core
+- Identity Framework
+- Docker
+
+### Infrastructure: 
+- Render for deployment
+- Supabase for database
+- SendGrid for sending emails
